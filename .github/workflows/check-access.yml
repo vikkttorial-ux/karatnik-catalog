@@ -1,0 +1,85 @@
+name: Проверка доступа к таблице
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check:
+    name: Прочитать заголовки и первые 10 строк
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Подготовить Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Установить библиотеки доступа
+        run: python -m pip install 'google-auth[requests]>=2.40,<3'
+      - name: Проверить чтение таблицы
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from collections import Counter
+          from urllib.parse import quote
+          from google.oauth2 import service_account
+          from google.auth.transport.requests import AuthorizedSession
+
+          def fail(message):
+              print('ОШИБКА: ' + message)
+              sys.exit(1)
+
+          raw = os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON', '')
+          if not raw.strip():
+              fail('Добавьте секрет GOOGLE_SERVICE_ACCOUNT_JSON в настройки репозитория.')
+          try:
+              info = json.loads(raw)
+              if info.get('token_uri') != 'https://oauth2.googleapis.com/token':
+                  fail('Неверный адрес авторизации в ключе. Используйте исходный JSON-файл Google.')
+              credentials = service_account.Credentials.from_service_account_info(
+                  info, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'])
+          except (ValueError, KeyError, TypeError):
+              fail('Ключ повреждён. Вставьте в секрет всё содержимое исходного JSON-файла.')
+
+          sheet_id = '18RDx2lWEJk6wfsw01lzz6WzTq-rdElfaQj_VzHblJ14'
+          cell_range = quote("'Исходники'!1:11", safe='')
+          url = f'https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}/values/{cell_range}'
+          try:
+              with AuthorizedSession(credentials) as session:
+                  response = session.get(url, params={'valueRenderOption': 'FORMATTED_VALUE'}, timeout=60)
+          except Exception:
+              fail('Не удалось подключиться к Google. Проверьте, что ключ действует, и повторите запуск.')
+          if response.status_code != 200:
+              messages = {
+                  400: 'Проверьте точное название листа: Исходники.',
+                  401: 'Google не принял ключ сервисного аккаунта.',
+                  403: 'Проверьте включение Google Sheets API и доступ Читатель для сервисного аккаунта.',
+                  404: 'Таблица не найдена или недоступна сервисному аккаунту.',
+                  429: 'Превышен лимит запросов. Повторите запуск позже.',
+              }
+              fail(messages.get(response.status_code, f'Google вернул код {response.status_code}. Повторите запуск позже.'))
+          try:
+              rows = response.json().get('values', [])
+          except ValueError:
+              fail('Google вернул некорректный ответ.')
+          if not rows or not any(str(value).strip() for value in rows[0]):
+              fail('Первая строка не содержит заголовков.')
+          if len(rows) < 11:
+              fail(f'Ожидались заголовки и 10 строк данных, получено строк данных: {len(rows) - 1}.')
+          print('УСПЕХ: прочитаны заголовки и первые 10 строк листа Исходники.')
+          print('Значения ячеек с товарами не выводятся в публичный журнал.')
+          print('ЗАГОЛОВКИ КОЛОНОК (номер — точное название):')
+          for index, value in enumerate(rows[0], start=1):
+              print(f'{index} — {json.dumps(str(value), ensure_ascii=False)}')
+          counts = Counter(str(value).strip() for value in rows[0] if str(value).strip())
+          for title, count in counts.items():
+              if count > 1:
+                  print(f'ПОВТОР ЗАГОЛОВКА: {json.dumps(title, ensure_ascii=False)} — {count}')
+          print('Этап 0: чтение проверено. Состав обязательных колонок согласуем по этим заголовкам.')
+          PY
