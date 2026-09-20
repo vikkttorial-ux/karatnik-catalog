@@ -1,0 +1,44 @@
+name: Каталог — публикация
+on:
+  push:
+    branches: [main]
+    paths: [catalog-bundle.zip, .github/workflows/publish.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: catalog-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Распаковать каталог
+        run: python -m zipfile -e catalog-bundle.zip .
+      - name: Проверить публикуемые файлы
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from catalog import scan_site, validate_catalog
+          data = json.loads(Path('site/data.json').read_text(encoding='utf-8'))
+          validate_catalog(data, sum(item['units'] for item in data['items']))
+          scan_site('site')
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Опубликовать
+        id: deployment
+        uses: actions/deploy-pages@v4
