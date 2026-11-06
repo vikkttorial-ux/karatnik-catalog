@@ -1,0 +1,68 @@
+{
+  "spreadsheet_id": "18RDx2lWEJk6wfsw01lzz6WzTq-rdElfaQj_VzHblJ14",
+  "sheet": "Исходники",
+  "headers": {
+    "marka": "Марка/бренд",
+    "code": "Код",
+    "art": "Артикул",
+    "naim": "Наименование",
+    "full_name": "Наименование полное",
+    "tip": "Наименование изделя",
+    "polnpust": "Полн/Пуст",
+    "char2": "Характеристика 2",
+    "char3": "Характеристика 3",
+    "size": "Размер",
+    "thickness": "Толщина",
+    "proba": "Проба",
+    "cvet": "Цвет",
+    "vstavka": "Вставки",
+    "weight": "ВЕС",
+    "service": "Наименование услуги",
+    "stock": "Склад"
+  },
+  "stone_group_header": null,
+  "stone_rules_approved": true,
+  "missing_article_policy": "unit_code",
+  "ignore_empty_code_templates": true,
+  "stock_aliases": {
+    "гостика": "Гостинка"
+  },
+  "max_article_drop": 0.15,
+  "article_characteristic_overrides": {
+    "019451": {
+      "char2": "",
+      "char3": ""
+    },
+    "019529": {
+      "char2": "",
+      "char3": ""
+    },
+    "Т100613928": {
+      "char2": "Обручальное"
+    },
+    "Т100011469": {
+      "char2": "Обручальное"
+    },
+    "Т10001016": {
+      "char2": "Обручальное"
+    },
+    "Т10001012": {
+      "char2": "Обручальное"
+    },
+    "Т100013731": {
+      "char2": "Обручальное"
+    },
+    "Т10001225": {
+      "char2": "Обручальное"
+    },
+    "Т10001009": {
+      "char2": "Обручальное"
+    },
+    "Т10061Д999": {
+      "char2": "Обручальное"
+    },
+    "Т13061Д603": {
+      "char2": "Обручальное"
+    }
+  }
+}
