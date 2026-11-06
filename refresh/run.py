@@ -2,7 +2,7 @@
 import argparse,json,os,shutil,subprocess,sys
 from datetime import datetime,timezone
 from pathlib import Path
-from urllib.parse import quote,urlencode
+from urllib.parse import quote,unquote,urlencode
 REPO=Path(__file__).resolve().parents[1];RUNTIME=REPO/'runtime';WORK=RUNTIME/'work';OWNER=RUNTIME/'outputs/owner-dashboard';CAT=RUNTIME/'outputs/karatnik-catalog'
 BACKEND='https://karatnik-product-photos.workspace-903713.chatgpt.site'
 MASTER='18RDx2lWEJk6wfsw01lzz6WzTq-rdElfaQj_VzHblJ14';SUPPLEMENT='1-jMJB9MRi3Tbb9oeARM0SwZ4vIhTF-xMPRmVaA6P_kU'
@@ -18,6 +18,17 @@ def valid_sales_header(header):
  expected={1:'Наименование услуги',5:'ЮР',6:'Вес ( в гр)',12:'Цена со скидкой',15:'ФИО продавца'}
  normalize=lambda v:''.join(str(v).split()).casefold()
  return len(header)>=16 and all(normalize(header[i])==normalize(label) for i,label in expected.items())
+def preserve_photo_names(site,previous):
+ photos=(site/'photos').resolve();count=0
+ for item in previous['items']:
+  value=item.get('photo','')
+  if not value.startswith('photos/'):continue
+  target=site/unquote(value)
+  if target.parent.resolve()!=photos:raise RuntimeError('Небезопасный путь фотографии.')
+  if target.is_file():continue
+  matches=[p for p in photos.iterdir() if p.is_file() and p.name.casefold()==target.name.casefold()]
+  if len(matches)==1:shutil.copy2(matches[0],target);count+=1
+ return count
 class Reader:
  def __init__(self):
   from google.oauth2 import service_account
@@ -56,6 +67,7 @@ def build(fixtures=None):
  shutil.copy2(REPO/'catalog.py',CAT/'catalog.py');shutil.copy2(REPO/'refresh/catalog-config.json',CAT/'config.json');shutil.copytree(REPO/'site',CAT/'site',dirs_exist_ok=True)
  for p in (REPO/'refresh/builders').glob('*.py'):shutil.copy2(p,(CAT if p.name=='enrich_attributes.py' else OWNER)/p.name)
  cache=REPO/'refresh-cache';cache.mkdir(exist_ok=True);previous=read(cache/'stock.json') if (cache/'stock.json').exists() else read(CAT/'site/data.json')
+ print('Сохранены точные имена прежних фотографий:',preserve_photo_names(CAT/'site',previous))
  write(WORK/'before-refresh.json',previous);write(WORK/'backup-refresh-previous/stock.json',previous)
  if (cache/'history').exists():
   for p in (cache/'history').glob('*.json'):write(WORK/('backup-refresh-'+p.stem)/'stock.json',read(p))
