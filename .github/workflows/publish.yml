@@ -35,7 +35,9 @@ jobs:
       - name: Прочитать таблицы и проверить данные
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: python refresh/run.py
+        run: |
+          python -m unittest discover -s refresh -p 'test_*.py'
+          python refresh/run.py
       - name: Проверить публикуемые файлы
         run: |
           python - <<'PY'

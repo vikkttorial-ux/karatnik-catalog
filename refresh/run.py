@@ -14,6 +14,10 @@ def col(i):
  out='';i+=1
  while i:i,n=divmod(i-1,26);out=chr(65+n)+out
  return out
+def valid_sales_header(header):
+ expected={1:'Наименование услуги',5:'ЮР',6:'Вес ( в гр)',12:'Цена со скидкой',15:'ФИО продавца'}
+ normalize=lambda v:''.join(str(v).split()).casefold()
+ return len(header)>=16 and all(normalize(header[i])==normalize(label) for i,label in expected.items())
 class Reader:
  def __init__(self):
   from google.oauth2 import service_account
@@ -64,7 +68,7 @@ def build(fixtures=None):
   sr=reader.rows(SUPPLEMENT,'Артикулы',2,allowed,{'Артикул','Бренд','Характеристика 2','Тип замка'});sources=[]
   for file,stock in [('1pyv0zCDJFdHC36pxK99neo6uNUw8rl8Hu5d6d0DY4II','Ленинградская 33'),('1sGLiSfctiOHUN_ncirhwVTWl8LyMSE1R1djZWsMkYtg','Гостинка (В.Е.Левин)')]:
    rows=reader.rows(file,'Продажи')
-   if len(rows[0])<16 or str(rows[0][0]).strip()!='Дата':raise RuntimeError('Изменились колонки продаж.')
+   if not valid_sales_header(rows[0]):raise RuntimeError('Изменились колонки продаж.')
    sources.append({'id':file,'stock':stock,'rows':[r[:16] for r in rows]})
   stamp=datetime.now(timezone.utc).isoformat();master={'values':mr,'read_at':stamp};supp={'values':sr,'read_at':stamp};sales={'sources':sources,'read_at':stamp}
  write(WORK/'source-sept21.json',master);write(WORK/'supplement-articles.json',supp);write(WORK/'owner-store-sales-v2.json',sales)
