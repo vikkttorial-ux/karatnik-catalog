@@ -95,6 +95,9 @@ def build(fixtures=None):
  for script in ['build_store_sales.py','build_analytics.py']:run(OWNER/script)
  run(CAT/'enrich_attributes.py')
  for script in ['build_marketing.py','build_promotions.py']:run(OWNER/script)
+ sys.path.insert(0,str(OWNER));sys.path.insert(0,str(REPO/'refresh'))
+ from verified_labels import apply_verified_labels
+ apply_verified_labels(REPO/'refresh/promotions-verified.json',master,read(OWNER/'stock.json'),read(OWNER/'data.json'),OWNER,CAT)
  stock=read(OWNER/'stock.json');prior={(p['art'],p['marka']):p for p in previous['items']}
  if any(prior.get((p['art'],p['marka']),{}).get('photo') and not p.get('photo') for p in stock['items']):raise RuntimeError('Утрачена известная фотография.')
  if read(OWNER/'analytics.json')['stock']!=stock:raise RuntimeError('Аналитика и остатки расходятся.')
