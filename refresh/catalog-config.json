@@ -18,7 +18,8 @@
     "vstavka": "Вставки",
     "weight": "ВЕС",
     "service": "Наименование услуги",
-    "stock": "Склад"
+    "stock": "Склад",
+    "prc": "ПРЦ, ₽"
   },
   "stone_group_header": null,
   "stone_rules_approved": true,

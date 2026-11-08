@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Каратник · Каталог. Наличие изделий, размеры и остатки по магазинам.">
+  <title>Каратник · Каталог</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%238a6a2f'/%3E%3Ctext x='20' y='29' text-anchor='middle' font-family='Georgia' font-size='29' fill='white'%3EК%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=unit-facts-1108">
+  <script type="module" src="app.mjs?v=unit-facts-1108"></script>
+</head>
+<body>
+  <a class="skip-link" href="#results">Перейти к изделиям</a>
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <div class="brand-row">
+        <a class="brand" href="./" aria-label="Каратник · Каталог, сбросить выборку">
+          <span class="brand-mark" aria-hidden="true">К</span>
+          <span><span class="brand-title">Каратник <span class="brand-separator">·</span> Каталог</span><span class="brand-caption">инструмент для продавцов</span></span>
+        </a>
+        <div class="freshness" id="freshness" role="status">Загружаем остатки…</div>
+      </div>
+      <nav class="workspace-nav" aria-label="Разделы Каратника">
+        <a class="workspace-tab" href="./" aria-current="page">Каталог</a>
+        <a class="workspace-tab" id="staff-tab" href="#" hidden>Товаровед</a>
+      </nav>
+      <div class="search-row">
+        <div class="search-box">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+          <label class="sr-only" for="search">Поиск по юр-коду, артикулу, наименованию, вставке или бренду</label>
+          <input id="search" type="search" placeholder="Юр-код без нулей, артикул или название" autocomplete="off" spellcheck="false" enterkeyhint="search" disabled>
+          <button class="clear-search" id="clear-search" type="button" aria-label="Очистить поиск" hidden>×</button>
+        </div>
+        <button class="filter-trigger" id="open-filters" type="button" disabled>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16M9 4v6M15 14v6"/></svg>
+          Фильтры <span class="filter-bubble" id="filter-count" hidden>0</span>
+        </button>
+        <div class="header-count" id="header-count">— позиций</div>
+      </div>
+      <nav class="type-nav" id="types" aria-label="Тип изделия"></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <aside class="sidebar" aria-label="Фильтры каталога">
+      <div class="sidebar-heading"><h2>Фильтры</h2><button class="text-button reset-all" type="button" disabled>Сбросить</button></div>
+      <div id="desktop-filters"></div>
+    </aside>
+    <section class="results" id="results" aria-labelledby="results-title" tabindex="-1">
+      <div class="results-heading">
+        <div><p class="eyebrow">НАЛИЧИЕ В МАГАЗИНАХ</p><h1 id="results-title">Все изделия <span id="result-count"></span></h1></div>
+        <button id="share-selection" class="share-button" type="button" disabled title="Скопировать ссылку на выборку">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m10 13 4-4M8.5 15l-1 1a3.5 3.5 0 0 1-5-5l4-4a3.5 3.5 0 0 1 5 0M15.5 9l1-1a3.5 3.5 0 0 1 5 5l-4 4a3.5 3.5 0 0 1-5 0"/></svg>
+          <span>Ссылка на выборку</span>
+        </button>
+      </div>
+      <div id="earring-filters" hidden><div class="weave-filter"><label for="earring-kind-select">Вид серёг (характеристика 2)</label><select id="earring-kind-select"></select></div><div class="weave-filter"><label for="earring-detail-select">Характеристика 3</label><select id="earring-detail-select"></select></div><div class="weave-filter"><label for="earring-lock-select">Тип замка</label><select id="earring-lock-select"></select></div><p id="earring-lock-note" class="no-sizes" hidden>Типы замков пока не заполнены в исходной таблице.</p></div>
+      <div id="ring-kind-filter" class="weave-filter" hidden><label for="ring-kind-select">Вид кольца</label><select id="ring-kind-select"></select></div>
+      <div id="wedding-filters" class="wedding-filters" hidden><div class="weave-filter"><label for="ring-style-select">Характеристика 3</label><select id="ring-style-select"></select></div><div class="weave-filter"><label for="ring-width-select">Ширина шинки</label><select id="ring-width-select"></select></div></div>
+      <div id="weave-filter" class="weave-filter" hidden><label for="weave-select">Плетение (характеристика 2)</label><select id="weave-select"><option value="">Все плетения</option></select></div>
+      <div class="selection-summary" id="selection-summary" hidden></div>
+      <p class="sr-only" id="results-announcement" role="status" aria-live="polite"></p>
+      <div class="message-panel" id="loading-panel" role="status"><span class="loading-dot" aria-hidden="true"></span>Загружаем каталог…</div>
+      <div class="message-panel error-panel" id="error-panel" role="alert" hidden><h2>Не удалось открыть каталог</h2><p id="error-message">Проверьте подключение к интернету и попробуйте ещё раз.</p><button id="retry" type="button" class="primary-button">Повторить загрузку</button></div>
+      <div class="message-panel empty-panel" id="empty-panel" hidden><span class="empty-symbol" aria-hidden="true">∅</span><h2>Ничего не найдено</h2><p>Попробуйте снять часть фильтров</p><button type="button" class="primary-button reset-all">Сбросить все фильтры</button></div>
+      <div class="cards" id="cards"></div>
+      <div class="load-more-wrap" id="load-more-wrap" hidden><p id="shown-count"></p><button id="load-more" type="button" class="secondary-button">Показать ещё 60</button></div>
+    </section>
+  </main>
+  <footer class="site-footer" id="footer">Источник: Товар_Каратник · Исходники</footer>
+  <dialog class="filter-dialog" id="filter-dialog" aria-labelledby="filters-title">
+    <div class="dialog-heading"><h2 id="filters-title">Фильтры</h2><button class="icon-button" id="close-filters" type="button" aria-label="Закрыть фильтры">×</button></div>
+    <div class="mobile-filters" id="mobile-filters"></div>
+    <div class="dialog-actions"><button class="text-button reset-all" type="button">Сбросить все</button><button id="apply-filters" type="button" class="primary-button">Показать изделия</button></div>
+  </dialog>
+  <dialog class="photo-dialog" id="photo-dialog" aria-label="Фотография изделия"><button class="icon-button" id="close-photo" type="button" aria-label="Закрыть фотографию">×</button><img id="large-photo" alt=""><p id="photo-caption"></p></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

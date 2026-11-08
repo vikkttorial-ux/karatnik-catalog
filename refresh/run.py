@@ -64,6 +64,9 @@ class Reader:
   return rows
 def build(fixtures=None):
  for p in [WORK,OWNER,CAT]:p.mkdir(parents=True,exist_ok=True)
+ # Public catalog source overrides are kept outside the legacy photo bundle.
+ shutil.copy2(REPO/'refresh/catalog.py',REPO/'catalog.py')
+ shutil.copytree(REPO/'refresh/catalog-assets',REPO/'site',dirs_exist_ok=True)
  shutil.copy2(REPO/'catalog.py',CAT/'catalog.py');shutil.copy2(REPO/'refresh/catalog-config.json',CAT/'config.json');shutil.copytree(REPO/'site',CAT/'site',dirs_exist_ok=True)
  for p in (REPO/'refresh/builders').glob('*.py'):shutil.copy2(p,(CAT if p.name=='enrich_attributes.py' else OWNER)/p.name)
  cache=REPO/'refresh-cache';cache.mkdir(exist_ok=True);previous=read(cache/'stock.json') if (cache/'stock.json').exists() else read(CAT/'site/data.json')
