@@ -1,5 +1,5 @@
 // Чистые функции поиска и фильтров: используются страницей и проверками.
-export const FILTER_KEYS = ['selection','tip','size','char2','char3','thickness','lock','marka','proba','cvet','polnpust','kamni','stock','photo'];
+export const FILTER_KEYS = ['selection','tip','size','char2','char3','thickness','lock','marka','proba','cvet','polnpust','kamni','stock','photo','inspired_by','pendant_kind','religion','motif','saint'];
 export const PHOTO_FILTER_VALUES = ['Без фото','С фото'];
 export const supportsSize = tip => ['Кольцо','Цепь','Браслет','Колье'].includes(tip);
 export const TYPE_ORDER = ['Кольцо','Серьги','Цепь','Браслет','Подвеска','Колье','Пирсинг','Брошь'];
@@ -32,7 +32,7 @@ export function serializeState(state) {
   return params.toString();
 }
 export function valuesFor(item,key) {
-  if(['char2','char3','thickness','lock'].includes(key)) {
+  if(['char2','char3','thickness','lock','inspired_by','pendant_kind','religion','motif','saint'].includes(key)) {
     const values=item.details?.[key];
     return values?.length?values:[item[key] || EMPTY];
   }

@@ -1,7 +1,8 @@
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=unit-facts-1108';
+import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=attrs-1109';
 
 import {SELECTIONS,showcase,promotionInfo} from './promotion-core.mjs';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=unit-facts-1108';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=attrs-1109';
 const $=id=>document.getElementById(id);
 fetch('staff-config.json',{cache:'no-store'})
   .then(response=>response.ok?response.json():null)
@@ -15,7 +16,7 @@ fetch('staff-config.json',{cache:'no-store'})
   })
   .catch(()=>{});
 const number=new Intl.NumberFormat('ru-RU');
-const labels={selection:'Подборки',tip:'Вид изделия',char2:'Характеристика 2',char3:'Характеристика 3',lock:'Тип замка',thickness:'Толщина',marka:'Марка',size:'Размеры',proba:'Проба',cvet:'Цвет металла',polnpust:'Полновес / Пустотел',kamni:'Камни',stock:'Склад наличия',photo:'Фото'};
+const labels={inspired_by:'Под бренд',pendant_kind:'Вид подвески',religion:'Религиозная тема',motif:'Мотив / символ',saint:'Образ / святой',selection:'Подборки',tip:'Вид изделия',char2:'Характеристика 2',char3:'Характеристика 3',lock:'Тип замка',thickness:'Толщина',marka:'Марка',size:'Размеры',proba:'Проба',cvet:'Цвет металла',polnpust:'Полновес / Пустотел',kamni:'Камни',stock:'Склад наличия',photo:'Фото'};
 const swatches={'КР':'#ca9982','Б':'#d5d8dd','Ж':'#d2b35e','2ЦВ':'linear-gradient(90deg,#d5d8dd 50%,#ca9982 50%)','Ч':'#4d4e52','СЗ':'linear-gradient(90deg,#d5d8dd 50%,#d2b35e 50%)'};
 const photoIcon='<svg aria-hidden="true" viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="26" rx="3"/><circle cx="15" cy="16" r="3"/><path d="m6 29 10-9 7 6 5-5 7 7"/></svg>';
 let state=parseState(location.search),items=[],filtered=[],domains={},shown=0,generatedAt='',loading=false,approvedPhotos=new Map();
@@ -84,6 +85,7 @@ function renderFilters(counts,host,mobile=false) {
   const primaryKeys=['selection','tip','proba','marka','stock','size','char2','char3'];
   const keys=[...primaryKeys,...FILTER_KEYS.filter(key=>!primaryKeys.includes(key))];
   for(const key of keys) {
+    if(['pendant_kind','religion','motif','saint'].includes(key)&&state.tip!=='Подвеска'&&!state[key])continue;
     if(key==='size'&&!supportsSize(state.tip)) continue;
     if(key==='lock'&&state.tip!=='Серьги'&&!state.lock) continue;
     const fieldset=el('fieldset','filter-group'),legend=el('legend','',key==='char2'&&['Цепь','Браслет'].includes(state.tip)?'Плетение (характеристика 2)':filterLabel(key));fieldset.append(legend);
@@ -186,7 +188,7 @@ function card(item) {
   const tagValues=[item.proba?{label:labelFor('proba',item.proba),style:item.proba==='585'?'gold':'silver'}:null,
     item.cvet?{label:labelFor('cvet',item.cvet)}:null,item.polnpust?{label:item.polnpust}:null,item.kamni?{label:item.kamni==='Не определено'?'Камни не определены':item.kamni}:null];
   for(const tag of tagValues.filter(Boolean)) tags.append(el('span','tag '+(tag.style||''),tag.label));
-  body.append(heading,tags);appendPhotoUploadLink(body,item.art,item.marka);
+  body.append(heading,tags);appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);
   const stickers=el('div','photo-stickers');
   const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры'};
   const colors={'Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
@@ -204,7 +206,7 @@ function card(item) {
     const block=el('details','item-description characteristics');
     block.append(el('summary','','Характеристики'));
     const list=el('dl','characteristics-list');
-    const names={char2:['Цепь','Браслет'].includes(item.tip)?'Плетение (характеристика 2)':'Характеристика 2',char3:'Характеристика 3',thickness:item.tip==='Кольцо'?'Ширина шинки':'Толщина (как в таблице)',lock:'Тип замка',main_stone:'Основной камень',stone_color:'Цвет камня',stone_cut:'Огранка',weight:'Вес, г',vstavka:'Вставки',polnpust:'Полновесность'};
+    const names={char2:['Цепь','Браслет'].includes(item.tip)?'Плетение (характеристика 2)':'Характеристика 2',char3:'Характеристика 3',thickness:item.tip==='Кольцо'?'Ширина шинки':'Толщина (как в таблице)',lock:'Тип замка',inspired_by:'Под бренд',pendant_kind:'Вид подвески',religion:'Религиозная тема',motif:'Мотив / символ',saint:'Образ / святой',main_stone:'Основной камень',stone_color:'Цвет камня',stone_cut:'Огранка',weight:'Вес, г',vstavka:'Вставки',polnpust:'Полновесность'};
     for(const [key,name] of Object.entries(names)) {
       const values=item.details[key];if(!values?.length)continue;
       list.append(el('dt','',name),el('dd','',values.join('; ')));
@@ -263,7 +265,8 @@ async function load() {
     if(!response.ok) throw new Error('Не удалось прочитать данные');
     const data=validateData(await response.json());
     const promoResponse=await fetch('./promotions.json',{cache:'no-cache'});if(!promoResponse.ok)throw Error('Подборки недоступны');const promotions=await promoResponse.json();
-    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(p=>{const approved=approvedPhotos.get(photoPair(p.art,p.marka));return {...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved'}:{}),promotions:promotionInfo(p,promotions)};}));
+    let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
+    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return {...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved'}:{}),promotions:promotionInfo(p,promotions)};}));
     domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
     $('search').value=state.q;updateFreshness();render();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
