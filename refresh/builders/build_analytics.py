@@ -8,7 +8,8 @@ sales=read(root/'data.json');stock=read(root/'stock.json')
 source=read(workspace/'work/source-sept21.json')['values']
 raw=read(workspace/'work/owner-store-sales-v2.json')
 sys.path.insert(0,str(workspace/'outputs/karatnik-catalog'))
-from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES
+from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES, unit_number
+from build_marketing import parse_date
 config=read(workspace/'outputs/karatnik-catalog/config.json')
 columns=resolve_headers(source[0],config)
 stock_by_art={p['art']:p for p in stock['items']}
@@ -37,6 +38,9 @@ for sale in sales['items']:
     r['thickness']=normalize_size(r['thickness'])
     for field,value in config.get('article_characteristic_overrides',{}).get(r['art'],{}).items():
         r[{'char2':'weave'}.get(field,field)]=value
+    received={parse_date(x[header['Дата прихода']])[0] for x in candidates if len(x)>header['Дата прихода']}
+    received.discard(None)
+    r['received_date']=next(iter(received)) if len(received)==1 and next(iter(received))<=r['date'] else ''
     r['key']=key(r['art'],r['brand']);enriched.append(r)
 stock_units=[]
 for cells in source[1:]:
@@ -48,7 +52,8 @@ for cells in source[1:]:
     if not p:raise ValueError('Inventory row missing from catalog')
     row.update(config.get('article_characteristic_overrides',{}).get(art,{}))
     store=normalize_stock(row['stock'],config.get('stock_aliases',{}))[0]
-    stock_units.append(dict(key=key(art,p['marka']),art=art,brand=p['marka'],category=p['tip'],proba=row['proba'],size=normalize_size(row['size']),weave=row['char2'],char3=row['char3'],thickness=normalize_size(row['thickness']),stock=store,units=1))
+    received,received_quality=parse_date(cells[header['Дата прихода']] if len(cells)>header['Дата прихода'] else None)
+    stock_units.append(dict(code=row['code'],received_date=received or '',received_quality=received_quality,grams=unit_number(row.get('weight'),positive=True),key=key(art,p['marka']),art=art,brand=p['marka'],category=p['tip'],proba=row['proba'],size=normalize_size(row['size']),weave=row['char2'],char3=row['char3'],thickness=normalize_size(row['thickness']),stock=store,units=1))
 from collections import Counter
 actual=Counter((r['art'],r['stock']) for r in stock_units)
 expected=Counter({(p['art'],s):q for p in stock['items'] for s,q in p['stocks'].items()})
@@ -71,6 +76,6 @@ for p in stock['items']:
         previous=present
     first_index=next((i for i,(stamp,_) in enumerate(ordered) if stamp==first),0)
     history[k]={'status':'Вернулся в наличие' if returned else 'Впервые замечен' if first_index>0 else 'В начальном снимке','first_observed':first}
-out=dict(sales=enriched,stock=stock,stock_units=stock_units,history=history,history_dates=[s for s,_ in ordered],sales_read_at=sales['read_at'],attribute_snapshot=read(workspace/'work/source-sept21.json')['read_at'],movement_history_available=False)
+out=dict(sales=enriched,stock=stock,stock_units=stock_units,history=history,history_dates=[s for s,_ in ordered],sales_read_at=sales['read_at'],attribute_snapshot=read(workspace/'work/source-sept21.json')['read_at'],movement_history_available=False,unit_receipt_dates_available=True)
 (root/'analytics.json').write_text(json.dumps(out,ensure_ascii=False),encoding='utf-8')
 print(json.dumps({'snapshots':len(ordered),'sales':len(enriched),'sizes_known':sum(bool(r['size']) for r in enriched),'history_from':ordered[0][0]},ensure_ascii=False))
