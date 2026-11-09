@@ -1,7 +1,7 @@
 // Domain vocabulary pilot. Missing source attributes remain unconfirmed.
 export const norm=v=>String(v??'').normalize('NFKC').toLocaleLowerCase('ru').replace(/ё/g,'е').trim();
 const compact=v=>norm(v).replace(/[\s‐‑‒–—-]/g,'');
-const codeNumber=v=>{const m=compact(v).match(/^(?:юр)?(\d+)$/u);return m?m[1].replace(/^0+(?=\d)/,''):'';};
+const codeNumber=v=>{const s=norm(v).replace(/^юр[\s‐‑‒–—-]*/u,'').replace(/\s/g,'');const m=s.match(/^(\d+)$/u);return m?m[1].replace(/^0+(?=\d)/,''):'';};
 const defs=[
  ['category','tip','Изделие',/(?:серьг[аи]|сережк[аи])/u,'Серьги'],
  ['category','tip','Изделие',/кольц[оа]/u,'Кольцо'],
@@ -26,10 +26,10 @@ export function parseClientQuery(text){
  const add=(id,field,label,value,m,extra={})=>{constraints.push({id,field,label,value,...extra});if(m)rest=rest.slice(0,m.index)+' '.repeat(m.text.length)+rest.slice(m.index+m.text.length);};
  // Explicit articles and codes are reserved before interpreting any digits as attributes.
  let m=/(?:артикул\s*[:№]?\s*|арт\.\s*)([а-яa-z0-9][а-яa-z0-9\-/]*)/u.exec(rest);
- if(m)add('article','q','Артикул',m[1],{index:m.index,text:m[0]});
- else {m=/юр\s*[‐‑‒–—-]?\s*\d+/u.exec(rest);if(m)add('article','q','Юр-код',m[0],{index:m.index,text:m[0]});
+ if(m)add('article','q','Артикул',m[1],{index:m.index,text:m[0]},{lookup:'article'});
+ else {m=/юр\s*[‐‑‒–—-]?\s*\d+/u.exec(rest);if(m)add('article','q','Юр-код',m[0],{index:m.index,text:m[0]},{lookup:'code'});
  else if(/^[\d\s]+$/u.test(rest)&&rest.replace(/\s/g,'').length>=4)add('article','q','Артикул / юр-код',rest.replace(/\s/g,''),{index:0,text:rest});
- else if(/^[а-яa-z0-9][а-яa-z0-9\-/]*$/u.test(rest)&&/\d/u.test(rest)&&(/[а-яa-z-]/u.test(rest)))add('article','q','Артикул',rest,{index:0,text:rest});}
+ else if(/^[а-яa-z0-9][а-яa-z0-9\-/]*$/u.test(rest)&&/\d/u.test(rest)&&(/[а-яa-z-]/u.test(rest)))add('article','q','Артикул',rest,{index:0,text:rest},{lookup:'article'});}
  const origin=tokenMatch(rest,/природн[а-я]*|натуральн[а-я]*|синтетическ[а-я]*|лабораторн[а-я]*|выращенн[а-я]*/u);
  if(origin&&/бриллиант/u.test(rest))add('stone_origin','stones','Бриллиант',/^(природн|натуральн)/u.test(origin.text)?'Природный':'Синтетический',origin);
  for(const [id,field,label,re,value] of defs){if(constraints.some(c=>c.id===id))continue;const hit=tokenMatch(rest,re);if(!hit)continue;
@@ -46,7 +46,7 @@ const list=v=>Array.isArray(v)?v.map(String):v?[String(v)]:[];
 function values(item,key){return [...list(item[key]),...list(item.details?.[key])].map(norm).filter(Boolean);}
 function fact(item,c){
  const v=norm(c.value);let source=values(item,c.field),hit=false;
- if(c.id==='article'){const q=compact(v),num=codeNumber(v);return {known:true,hit:compact(item.art)===q||(item.codes||[]).some(x=>compact(x)===q||(num&&codeNumber(x)===num))};}
+ if(c.id==='article'){const q=compact(v),num=codeNumber(v);return {known:true,hit:(c.lookup!=='code'&&compact(item.art)===q)||(c.lookup!=='article'&&(item.codes||[]).some(x=>num&&codeNumber(x)===num))};}
  if(c.id==='size'){source=(item.sizes||[]).filter(s=>s.q>0).map(s=>String(s.s).replace('.',','));return {known:true,hit:source.includes(c.value)};}
  if(c.id==='metal'){source=values(item,'proba');const probe=String(item.proba||'');return {known:source.length>0,hit:c.value==='Золото'?['375','583','585','750','999'].includes(probe):['800','830','875','925','960'].includes(probe)};}
  if(c.id==='stones'||c.id==='stone_origin'){

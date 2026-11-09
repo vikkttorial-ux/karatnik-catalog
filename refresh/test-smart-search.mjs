@@ -28,3 +28,7 @@ assert.equal(confirmed([ring],'кольцо размер 17').length,0);
 const data=JSON.parse(fs.readFileSync('site/data.json','utf8')).items;
 const real=confirmed(data,'цепь бисмарк 585 размер 55');for(const r of real){assert.ok(r.reasons.length===4);assert.ok(r.item.char2.includes('Бисмарк')||r.item.char2.includes('бисмарк'));}
 console.log('Text search: 32+ assertions passed; real catalog chain selection',real.length);
+
+assert.equal(confirmed([fixture('OTHER',{codes:['ЮР-00012169']})],'01-2169').length,0);
+assert.equal(confirmed([fixture('OTHER',{codes:['ЮР-00029556']})],'артикул 29556').length,0);
+assert.equal(confirmed([fixture('29556',{codes:[]})],'юр-29556').length,0);
