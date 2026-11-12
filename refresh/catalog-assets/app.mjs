@@ -2,6 +2,7 @@ import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from
 import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=attrs-1109';
 
 import {SELECTIONS,showcase,promotionInfo} from './promotion-core.mjs';
+import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
 import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=attrs-1109';
 const $=id=>document.getElementById(id);
 fetch('staff-config.json',{cache:'no-store'})
@@ -21,6 +22,7 @@ const swatches={'КР':'#ca9982','Б':'#d5d8dd','Ж':'#d2b35e','2ЦВ':'linear-g
 const photoIcon='<svg aria-hidden="true" viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="26" rx="3"/><circle cx="15" cy="16" r="3"/><path d="m6 29 10-9 7 6 5-5 7 7"/></svg>';
 let state=parseState(location.search),items=[],filtered=[],domains={},shown=0,generatedAt='',loading=false,approvedPhotos=new Map();
 let inputTimer,toastTimer;
+let campaignManifest=null,lastCampaignDay='';
 
 function el(tag,className,text) {const node=document.createElement(tag);if(className) node.className=className;if(text!==undefined) node.textContent=text;return node;}
 function button(className,text,handler) {const node=el('button',className,text);node.type='button';if(handler) node.addEventListener('click',handler);return node;}
@@ -46,7 +48,7 @@ function resetAll() {
   clearTimeout(inputTimer);state=blankState();$('search').value='';updateUrl();render();
 }
 function sortedDomain(key) {
-  if(key==='selection')return SELECTIONS;
+  if(key==='selection')return [...(items.some(item=>item.campaign)?['11.11']:[]),...SELECTIONS];
   const values=[...new Set(items.flatMap(item=>key==='size'&&item.tip!==state.tip?[]:valuesFor(item,key)))];
   if(key==='tip') {for(const value of TYPE_ORDER) if(!values.includes(value)) values.push(value);}
   if(key==='proba') {for(const value of ['585','925']) if(!values.includes(value)) values.push(value);}
@@ -190,10 +192,11 @@ function card(item) {
   for(const tag of tagValues.filter(Boolean)) tags.append(el('span','tag '+(tag.style||''),tag.label));
   body.append(heading,tags);appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);
   const stickers=el('div','photo-stickers');
-  const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры'};
-  const colors={'Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
+  const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
+  const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
   for(const label of item.promotions?.tags||[])stickers.append(el('span','photo-sticker '+(colors[label]||''),titles[label]||label));
   visual.append(stickers);
+  if(item.campaign){const end=item.campaign.ends_on.split('-').reverse().join('.');body.append(el('p','campaign-detail',`Скидка от ПРЦ: ${item.campaign.discount_percent}%. По ${end} включительно. Обычные 20% не суммируются.`));}
   if(item.promotions?.expected_date)body.append(el('p','insertion','Ожидается: '+item.promotions.expected_date));
   else if(item.promotions?.tags.includes('Скоро в продаже'))body.append(el('p','insertion','Дата поступления уточняется'));
   if(item.promotions?.replenished_sizes?.length)body.append(el('p','insertion','Пополнили размеры: '+item.promotions.replenished_sizes.join(', ')));
@@ -265,8 +268,9 @@ async function load() {
     if(!response.ok) throw new Error('Не удалось прочитать данные');
     const data=validateData(await response.json());
     const promoResponse=await fetch('./promotions.json',{cache:'no-cache'});if(!promoResponse.ok)throw Error('Подборки недоступны');const promotions=await promoResponse.json();
+    const campaignResponse=await fetch('./campaign-1111.json',{cache:'no-store'});if(!campaignResponse.ok)throw Error('Условия акции недоступны');campaignManifest=validateCampaign(await campaignResponse.json());lastCampaignDay=campaignDay();
     let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
-    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return {...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved'}:{}),promotions:promotionInfo(p,promotions)};}));
+    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved'}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
     domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
     $('search').value=state.q;updateFreshness();render();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
@@ -298,5 +302,5 @@ $('share-selection').addEventListener('click',async()=>{
 window.addEventListener('popstate',()=>{clearTimeout(inputTimer);state=parseState(location.search);$('search').value=state.q;if(items.length)render();});
 new ResizeObserver(()=>document.documentElement.style.setProperty('--header-height',`${$('site-header').getBoundingClientRect().height}px`)).observe($('site-header'));
 if('IntersectionObserver' in window) new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)&&shown<filtered.length) appendCards();},{rootMargin:'350px'}).observe($('load-more-wrap'));
-setInterval(updateFreshness,60000);
+setInterval(()=>{updateFreshness();if(items.length&&campaignManifest&&campaignDay()!==lastCampaignDay){lastCampaignDay=campaignDay();items=prepareItems(items.map(item=>withCampaign(item,campaignManifest)));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();}},60000);
 load();

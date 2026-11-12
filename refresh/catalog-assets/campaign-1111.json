@@ -1,0 +1,480 @@
+{
+  "label": "11.11",
+  "starts_on": "2026-11-11",
+  "ends_on": "2026-11-13",
+  "timezone": "Europe/Moscow",
+  "discount_basis": "ПРЦ",
+  "stacking": "replace",
+  "items": [
+    {
+      "art": "ЗБИТ170",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "ЗК1019",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "П29072024",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "П13092024",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "Т14701Б318",
+      "brand": "Каратов",
+      "discount_percent": 50
+    },
+    {
+      "art": "1011615",
+      "brand": "Соколов",
+      "discount_percent": 50
+    },
+    {
+      "art": "БГР10210070",
+      "brand": "Каратов",
+      "discount_percent": 50
+    },
+    {
+      "art": "51-110-02563-1",
+      "brand": "Соколов",
+      "discount_percent": 50
+    },
+    {
+      "art": "К6",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "ЗК1002/ВБр",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "ЗК1001/ВБр.",
+      "brand": "Каратник",
+      "discount_percent": 50
+    },
+    {
+      "art": "51-110-00285-1",
+      "brand": "Соколов",
+      "discount_percent": 50
+    },
+    {
+      "art": "Т14111А002-1",
+      "brand": "Каратов",
+      "discount_percent": 50
+    },
+    {
+      "art": "1406435341-1",
+      "brand": "ТД_Красносел_юв",
+      "discount_percent": 50
+    },
+    {
+      "art": "51-130-02097-1",
+      "brand": "Соколов",
+      "discount_percent": 50
+    },
+    {
+      "art": "Т13061Д601",
+      "brand": "Каратов",
+      "discount_percent": 45
+    },
+    {
+      "art": "51-110-02934-1",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "19451",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "19545",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18403",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18717",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "19402",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "Т182046011",
+      "brand": "Каратов",
+      "discount_percent": 45
+    },
+    {
+      "art": "51-110-02742-1",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "Т14201Б944",
+      "brand": "Каратов",
+      "discount_percent": 45
+    },
+    {
+      "art": "19572",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "19591",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18771",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "51-121-01553-1",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "17224",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18619",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18474",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "Т13006710",
+      "brand": "Каратов",
+      "discount_percent": 45
+    },
+    {
+      "art": "18444",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "17478",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "51-120-02169-1",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "17524",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "200400",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "Т10062В927",
+      "brand": "Каратов",
+      "discount_percent": 45
+    },
+    {
+      "art": "27251",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "51-110-02177-1",
+      "brand": "Соколов",
+      "discount_percent": 45
+    },
+    {
+      "art": "Т182046021",
+      "brand": "Каратов",
+      "discount_percent": 40
+    },
+    {
+      "art": "Т100101361-18",
+      "brand": "Каратов",
+      "discount_percent": 40
+    },
+    {
+      "art": "Т142101203",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т100101384",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т14761Д356",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т10062В696",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т142101204",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т147101201",
+      "brand": "Каратов",
+      "discount_percent": 35
+    },
+    {
+      "art": "Т107111006",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "ЗК1012/Бр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "БГР00516060",
+      "brand": "Каратов",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1011/Бр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1012",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "БРМ20516060",
+      "brand": "Каратов",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1011",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "БрТриКлвр10х2мм/онкс/з585",
+      "brand": "ГолденГлоб",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗС1003/ВБр.4",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1002/ВБр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1013/ВБр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1009/ВБр",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1015/Сп.4",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1015/Бр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗББ165А",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1018/Вбр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗС1004/Бр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1011/ВБр",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗС1003/5.5Вбр",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗК1005/Бр.",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "ЗБИТ175",
+      "brand": "Каратник",
+      "discount_percent": 40
+    },
+    {
+      "art": "Т10001009",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т142642947",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т102046019",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "19478",
+      "brand": "Соколов",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т14201Д895-К",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "БГР10210060",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "БПКЛ30614060",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "КольцоКЛ-28",
+      "brand": "ГолденГлоб",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т13061Д694",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т100625818",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "КольцоКЛ-53/прл",
+      "brand": "ГолденГлоб",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т142642900",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "Т10001Д265",
+      "brand": "Каратов",
+      "discount_percent": 30
+    },
+    {
+      "art": "КольцоКЛ-56/прл",
+      "brand": "ГолденГлоб",
+      "discount_percent": 30
+    },
+    {
+      "art": "51-110-02953-1",
+      "brand": "Соколов",
+      "discount_percent": 30
+    },
+    {
+      "art": "КольцоКЛ-24",
+      "brand": "ГолденГлоб",
+      "discount_percent": 30
+    },
+    {
+      "art": "ПдЛ52/бцФ/з585",
+      "brand": "ГолденГлоб",
+      "discount_percent": 40
+    },
+    {
+      "art": "к393",
+      "brand": "Мидас-Пермь",
+      "discount_percent": 40
+    },
+    {
+      "art": "к407",
+      "brand": "Мидас-Пермь",
+      "discount_percent": 40
+    },
+    {
+      "art": "3407035461",
+      "brand": "ТД_Красносел_юв",
+      "discount_percent": 40
+    },
+    {
+      "art": "с559",
+      "brand": "Мидас-Пермь",
+      "discount_percent": 40
+    },
+    {
+      "art": "Ср925Р-101005045",
+      "brand": "ЮСТ",
+      "discount_percent": 40
+    },
+    {
+      "art": "к149",
+      "brand": "Мидас-Пермь",
+      "discount_percent": 40
+    },
+    {
+      "art": "к246",
+      "brand": "Мидас-Пермь",
+      "discount_percent": 40
+    }
+  ]
+}

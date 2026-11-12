@@ -39,6 +39,7 @@ jobs:
           python -m unittest discover -s refresh -p 'test_*.py'
           python refresh/run.py
           node refresh/test-smart-search.mjs
+          node refresh/test-campaign.mjs
       - name: Обновить поиск по фотографиям
         run: |
           python refresh/build-visual-index.py --site site --work refresh-cache/visual --output refresh-cache/visual/latest-index.json

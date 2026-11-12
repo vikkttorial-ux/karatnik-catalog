@@ -9,6 +9,7 @@
 .type-nav::-webkit-scrollbar{display:none}.item-description{font-size:12px;color:var(--muted);line-height:1.5}.item-description summary{cursor:pointer;padding:3px 0}.item-description p{margin:8px 0 0;overflow-wrap:anywhere}.item-description[open]{padding-bottom:4px}
 
 .manufacturer-chips {max-height:220px;overflow-y:auto;overscroll-behavior:contain;padding:2px;}
+.photo-sticker.campaign1111{background:#9c243b;color:#fff;border:1px solid #ffffff55;font-weight:700;letter-spacing:.2px}.campaign-detail{margin:0;padding:8px 10px;border-radius:6px;background:color-mix(in srgb,#9c243b 9%,var(--surface));color:var(--text);font-size:12px;line-height:1.5;border-left:3px solid #9c243b}
 
 .characteristics-list {margin:12px 0; font-size:13px; line-height:1.5;}
 .characteristics-list dt {font-weight:600; margin-top:8px;}
