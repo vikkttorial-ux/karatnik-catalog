@@ -166,6 +166,11 @@ _ARTICLE_SPELLINGS = {}
 def article_identity(art, brand):
     """Whitespace does not distinguish models; punctuation and brand still do."""
     art = re.sub(r'\s+', '', str(art or ''))
+    if re.sub(r'\s+', '', str(brand or '')).casefold() == 'каратов':
+        art = re.sub(r'-РА$', '', art, flags=re.I)
+    if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
+            and re.fullmatch(r'БрЛТннс01(?:_\d+(?:[,.]\d+)?см_бцФ_(?:з585|бз585))?', art, re.I)):
+        return 'БрЛТннс01'
     if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
             and re.fullmatch(r'(?:Кольцо)?КЛ-63(?:/\d+(?:[,.]\d+)?/бцФ/з585)?', art, re.I)):
         return 'КЛ-63'
@@ -182,7 +187,7 @@ def configure_article_spellings(rows, art_col=3, brand_col=0, header_rows=1):
         if not art:
             continue
         identity = article_identity(art, brand)
-        preferred = 'КЛ-63' if identity == 'КЛ-63' and re.sub(r'\s+', '', brand).casefold() == 'голденглоб' else art
+        preferred = identity if identity != re.sub(r'\s+', '', art) else art
         _ARTICLE_SPELLINGS.setdefault((identity, brand.casefold()), preferred)
 
 
@@ -289,8 +294,9 @@ def validate_catalog(data, expected_units, previous=None, max_drop=0.15):
             for stock,entries in stock_codes.items():
                 if not isinstance(entries,list) or len(entries)!=item['stocks'][stock]:
                     raise BuildError('Число кодов единиц не совпадает с остатком по складу.')
-                if any(not isinstance(entry,dict) or not {'code','size'} <= set(entry) or set(entry)-{'code','size','grams','prc'}
+                if any(not isinstance(entry,dict) or not {'code','size'} <= set(entry) or set(entry)-{'code','size','grams','prc','cvet'}
                        or not isinstance(entry['code'],str) or not isinstance(entry['size'],str)
+                       or ('cvet' in entry and not isinstance(entry['cvet'],str))
                        or any(type(entry[field]) not in (int,float) or not math.isfinite(entry[field])
                               or entry[field] < 0 or (field=='grams' and entry[field]==0)
                               for field in ('grams','prc') if field in entry) for entry in entries):
@@ -433,6 +439,9 @@ def analyze(values, config, photos=None, generated_at=None):
         item['details'] = {field: sorted({r.get(field, '') for r in records if r.get(field, '')}, key=size_key)
                            for field in ('char2', 'char3', 'thickness', 'weight', 'vstavka', 'polnpust', 'lock')}
         item['details'] = {key: values for key, values in item['details'].items() if values}
+        colors = sorted({r['cvet'] for r in records if r['cvet']})
+        if len(colors) > 1:
+            item['details']['cvet'] = colors
         for field, value in config.get('article_characteristic_overrides', {}).get(art, {}).items():
             if field in ('char2', 'char3'):
                 if field in item:
@@ -447,7 +456,10 @@ def analyze(values, config, photos=None, generated_at=None):
         sizes = Counter(r['size'] for r in records if r['size'])
         stock_codes=defaultdict(list)
         for record in records:
-            stock_codes[record['stock']].append(unit_entry(record))
+            entry = unit_entry(record)
+            if len(colors) > 1:
+                entry['cvet'] = record['cvet']
+            stock_codes[record['stock']].append(entry)
         item.update(units=len(records), stocks=dict(sorted(stocks.items())),
                     sizes=[{'s': s, 'q': sizes[s]} for s in sorted(sizes, key=size_key)],
                     stock_codes={stock:stock_codes[stock] for stock in sorted(stocks)})

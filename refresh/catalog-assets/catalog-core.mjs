@@ -12,6 +12,8 @@ export const codeNumber = value => {
   return match ? match[1].replace(/^0+(?=\d)/,'') : '';
 };
 export function articleSearchAliases(item) {
+ if(String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')==='каратов')return [item.art+'-РА'];
+ if(item.art==='БрЛТннс01'&&String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')==='голденглоб')return Object.values(item.stock_codes||{}).flat().map(e=>'БрЛТннс01_'+e.size+'см_бцФ_'+(e.cvet==='Б'?'бз585':'з585'));
  if(item.art!=='КЛ-63'||String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')!=='голденглоб')return [];
  const sizes=(item.sizes||[]).map(x=>Number(String(x.s).replace(',','.'))).filter(Number.isFinite);
  return ['КольцоКЛ-63',...sizes.map(s=>'КольцоКЛ-63/'+s.toFixed(1).replace('.',',')+'/бцФ/з585')];
@@ -37,7 +39,7 @@ export function serializeState(state) {
   return params.toString();
 }
 export function valuesFor(item,key) {
-  if(['char2','char3','thickness','lock','inspired_by','pendant_kind','religion','motif','saint'].includes(key)) {
+  if(['char2','char3','thickness','lock','inspired_by','pendant_kind','religion','motif','saint','cvet'].includes(key)) {
     const values=item.details?.[key];
     return values?.length?values:[item[key] || EMPTY];
   }
@@ -101,7 +103,7 @@ export function validateData(data) {
       if(!item.stock_codes||typeof item.stock_codes!=='object'||Array.isArray(item.stock_codes)||Object.keys(item.stock_codes).length!==Object.keys(item.stocks).length||Object.keys(item.stock_codes).some(stock=>!Object.hasOwn(item.stocks,stock))) throw new Error('Склады в кодах единиц не совпадают с остатками');
       for(const [stock,entries] of Object.entries(item.stock_codes)) {
         if(!Array.isArray(entries)||entries.length!==item.stocks[stock]) throw new Error('Число кодов единиц не совпадает с остатком по складу');
-        if(entries.some(entry=>!entry||typeof entry!=='object'||Array.isArray(entry)||Object.keys(entry).some(key=>!['code','size','grams','prc'].includes(key))||typeof entry.code!=='string'||typeof entry.size!=='string'||['grams','prc'].some(key=>entry[key]!==undefined&&(typeof entry[key]!=='number'||!Number.isFinite(entry[key])||entry[key]<0||(key==='grams'&&entry[key]===0))))) throw new Error('Неверная запись кода единицы');
+        if(entries.some(entry=>!entry||typeof entry!=='object'||Array.isArray(entry)||Object.keys(entry).some(key=>!['code','size','grams','prc','cvet'].includes(key))||typeof entry.code!=='string'||typeof entry.size!=='string'||(entry.cvet!==undefined&&typeof entry.cvet!=='string')||['grams','prc'].some(key=>entry[key]!==undefined&&(typeof entry[key]!=='number'||!Number.isFinite(entry[key])||entry[key]<0||(key==='grams'&&entry[key]===0))))) throw new Error('Неверная запись кода единицы');
       }
     }
     if(item.sizes.some(s=>typeof s.s!=='string'||!Number.isInteger(s.q)||s.q<1)) throw new Error('Некорректные размеры');
@@ -115,7 +117,8 @@ export function formatUnitDetails(entry) {
   return {
     grams: typeof entry.grams==='number'&&Number.isFinite(entry.grams)&&entry.grams>0 ? gramFormat.format(entry.grams)+' г' : 'Вес —',
     prc: typeof entry.prc==='number'&&Number.isFinite(entry.prc)&&entry.prc>=0 ? 'ПРЦ '+rubleFormat.format(entry.prc)+' ₽' : 'ПРЦ —',
-    size: entry.size ? 'Размер '+entry.size : 'Размер —'
+    size: entry.size ? 'Размер '+entry.size : 'Размер —',
+    ...(typeof entry.cvet==='string'&&entry.cvet?{color:COLORS[entry.cvet]||entry.cvet}:{})
   };
 }
 

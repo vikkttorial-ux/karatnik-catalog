@@ -35,3 +35,15 @@ const model=prepareItems([{art:'КЛ-63',marka:'ГолденГлоб',naim:'Ко
 for(const q of ['КЛ-63','КольцоКЛ-63','КольцоКЛ-63/17,0/бцФ/з585'])assert.equal(filterItems(model,{...blankState(),q}).length,1);
 assert.equal(filterItems(model,{...blankState(),q:'КольцоКЛ-63/17,0/бцФ/бз585'}).length,0);
 console.log('Default new-first ordering, active-filter order and confirmed article aliases passed');
+
+{
+ const {prepareItems,filterItems,blankState,valuesFor,formatUnitDetails,validateData}=await import('./catalog-assets/catalog-core.mjs');
+ const assert=(await import('node:assert/strict')).default;
+ const bracelet={art:'БрЛТннс01',marka:'ГолденГлоб',tip:'Браслет',char2:'',proba:'585',cvet:'КР',polnpust:'',kamni:'Фианит',vstavka:'',naim:'Браслет',photo:'',units:1,stocks:{A:1},sizes:[{s:'18',q:1}],codes:['TEST'],stock_codes:{A:[{code:'TEST',size:'18',cvet:'Б'}]},details:{cvet:['Б','КР']}};
+ validateData({generated_at:'2026-11-18T00:00:00Z',items:[bracelet]});
+ assert.equal(filterItems(prepareItems([bracelet]),{...blankState(),q:'БрЛТннс01_18см_бцФ_бз585'}).length,1);
+ assert.deepEqual(valuesFor(bracelet,'cvet'),['Б','КР']);
+ assert.equal(formatUnitDetails(bracelet.stock_codes.A[0]).color,'Белое');
+ const chain=prepareItems([{...bracelet,art:'ЦНН20517035',marka:'Каратов'}]);
+ assert.equal(filterItems(chain,{...blankState(),q:'ЦНН20517035-РА'}).length,1);
+}

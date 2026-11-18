@@ -59,4 +59,21 @@ class WhitespaceModels(unittest.TestCase):
    self.assertNotEqual(key(a,'Каратник'),key('ЗК2027/Вбр','Каратник'))
   self.assertNotEqual(key('ЗК2027/Вбр','Другой'),key('ЗК2027 /Вбр','Каратник'))
 
+class ConfirmedAliases(unittest.TestCase):
+ def setUp(self):
+  catalog.configure_article_spellings([])
+ def tearDown(self):
+  catalog.configure_article_spellings([])
+ def test_tennis_bracelet_is_one_model_for_sizes_and_gold_colors(self):
+  arts=['БрЛТннс01_17см_бцФ_з585','БрЛТннс01_18см_бцФ_з585','БрЛТннс01_18см_бцФ_бз585']
+  for a in arts:self.assertEqual(catalog.canonical_article(a,'ГолденГлоб'),'БрЛТннс01')
+  result=snapshot_products([{'art':a,'marka':'ГолденГлоб','units':1,'sizes':[{'s':'17' if i==0 else '18','q':1}]} for i,a in enumerate(arts)])
+  self.assertEqual(result['БрЛТннс01|голденглоб']['units'],3)
+  self.assertEqual(len(result),1)
+ def test_karatov_suffix_is_not_a_new_model(self):
+  self.assertEqual(key('ЦНН20517035-РА','Каратов'),key('ЦНН20517035','Каратов'))
+  self.assertNotEqual(key('ЦНН20517035-РА','Другой'),key('ЦНН20517035','Другой'))
+  self.assertNotEqual(key('ЦНН20517035-РА2','Каратов'),key('ЦНН20517035','Каратов'))
+
 if __name__=='__main__':unittest.main()
+

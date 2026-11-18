@@ -1,7 +1,7 @@
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=labels-1118';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=variants-1118';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=labels-1118';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=variants-1118';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
 import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=attrs-1109';
 const $=id=>document.getElementById(id);
@@ -209,10 +209,10 @@ function card(item) {
     const block=el('details','item-description characteristics');
     block.append(el('summary','','Характеристики'));
     const list=el('dl','characteristics-list');
-    const names={char2:['Цепь','Браслет'].includes(item.tip)?'Плетение (характеристика 2)':'Характеристика 2',char3:'Характеристика 3',thickness:item.tip==='Кольцо'?'Ширина шинки':'Толщина (как в таблице)',lock:'Тип замка',inspired_by:'Под бренд',pendant_kind:'Вид подвески',religion:'Религиозная тема',motif:'Мотив / символ',saint:'Образ / святой',main_stone:'Основной камень',stone_color:'Цвет камня',stone_cut:'Огранка',weight:'Вес, г',vstavka:'Вставки',polnpust:'Полновесность'};
+    const names={cvet:'Цвет золота',char2:['Цепь','Браслет'].includes(item.tip)?'Плетение (характеристика 2)':'Характеристика 2',char3:'Характеристика 3',thickness:item.tip==='Кольцо'?'Ширина шинки':'Толщина (как в таблице)',lock:'Тип замка',inspired_by:'Под бренд',pendant_kind:'Вид подвески',religion:'Религиозная тема',motif:'Мотив / символ',saint:'Образ / святой',main_stone:'Основной камень',stone_color:'Цвет камня',stone_cut:'Огранка',weight:'Вес, г',vstavka:'Вставки',polnpust:'Полновесность'};
     for(const [key,name] of Object.entries(names)) {
       const values=item.details[key];if(!values?.length)continue;
-      list.append(el('dt','',name),el('dd','',values.join('; ')));
+      list.append(el('dt','',name),el('dd','',(key==='cvet'?values.map(v=>COLORS[v]||v):values).join('; ')));
     }
     block.append(list);
     if(Object.values(item.details).some(values=>values.length>1)) block.append(el('p','no-sizes','Перечислены значения у разных изделий этого артикула в наличии.'));
@@ -240,6 +240,7 @@ function card(item) {
         const code=el('span','unit-code',display);code.title=entry.code||'Код неизвестен';
         const facts=formatUnitDetails(entry),values=el('span','unit-code-values');
         values.append(el('span','unit-code-grams',facts.grams),el('span','unit-code-prc',facts.prc),el('span','unit-code-size',facts.size));
+        if(facts.color)values.append(el('span','unit-code-color',facts.color));
         row.append(code,values);list.append(row);
       }
       group.append(list);codes.append(group);

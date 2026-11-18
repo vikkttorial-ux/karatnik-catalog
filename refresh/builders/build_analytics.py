@@ -57,7 +57,7 @@ for cells in source[1:]:
     row.update(config.get('article_characteristic_overrides',{}).get(art,{}))
     store=normalize_stock(row['stock'],config.get('stock_aliases',{}))[0]
     received,received_quality=parse_date(cells[header['Дата прихода']] if len(cells)>header['Дата прихода'] else None)
-    stock_units.append(dict(code=row['code'],received_date=received or '',received_quality=received_quality,grams=unit_number(row.get('weight'),positive=True),key=key(art,p['marka']),art=art,brand=p['marka'],category=p['tip'],proba=row['proba'],size=normalize_size(row['size']),weave=row['char2'],char3=row['char3'],thickness=normalize_size(row['thickness']),stock=store,units=1))
+    stock_units.append(dict(code=row['code'],received_date=received or '',received_quality=received_quality,grams=unit_number(row.get('weight'),positive=True),key=key(art,p['marka']),art=art,brand=p['marka'],category=p['tip'],proba=row['proba'],cvet=row['cvet'],size=normalize_size(row['size']),weave=row['char2'],char3=row['char3'],thickness=normalize_size(row['thickness']),stock=store,units=1))
 from collections import Counter
 actual=Counter((r['art'],r['stock']) for r in stock_units)
 expected=Counter({(p['art'],s):q for p in stock['items'] for s,q in p['stocks'].items()})
