@@ -7,7 +7,7 @@ from collections import defaultdict
 ROOT = Path(__file__).resolve().parent
 WORK = ROOT.parents[1] / 'work'
 sys.path.insert(0,str(ROOT.parent/'karatnik-catalog'))
-from catalog import canonical_article
+from catalog import canonical_article, configure_article_spellings
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
 def key(art, brand): return canonical_article(art,brand) + '|' + str(brand or '').strip().casefold()
 
@@ -28,6 +28,7 @@ def parse_date(value):
 
 def build():
     source = read(WORK / 'marketing-stock-source.json')
+    configure_article_spellings(read(WORK / 'source-sept21.json')['values'])
     stock = read(ROOT / 'stock.json')
     receipts = defaultdict(list)
     quality = defaultdict(int)

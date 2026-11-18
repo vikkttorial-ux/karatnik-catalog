@@ -35,4 +35,28 @@ class ProductLabels(unittest.TestCase):
   a='КольцоКЛ-63/17,0/бцФ/бз585'
   self.assertEqual(catalog.canonical_article(a,'ГолденГлоб'),a)
 
+class WhitespaceModels(unittest.TestCase):
+ def setUp(self):
+  catalog.configure_article_spellings([])
+ def tearDown(self):
+  catalog.configure_article_spellings([])
+ def test_spaces_and_nonbreaking_spaces_share_model_evidence(self):
+  a='ЗК2027/Вбр'
+  b='ЗК2027 \u00a0/ Вбр'
+  self.assertEqual(catalog.canonical_article(a,'Каратник'),catalog.canonical_article(b,'Каратник'))
+  self.assertEqual(key(a,'Каратник'),key(b,'Каратник'))
+  result=snapshot_products([{'art':a,'marka':'Каратник','units':1,'sizes':[{'s':'17','q':1}]},
+                           {'art':b,'marka':'Каратник','units':2,'sizes':[{'s':'18','q':2}]}])
+  self.assertEqual(len(result),1)
+  self.assertEqual(result[key(a,'Каратник')]['units'],3)
+  self.assertEqual(result[key(a,'Каратник')]['sizes'],[{'s':'17','q':1},{'s':'18','q':2}])
+ def test_display_and_existing_asset_identity_survive_alias_lookup(self):
+  catalog.configure_article_spellings([[],['Тест','','','FBLK 291']])
+  self.assertEqual(catalog.canonical_article('F B L K291','Тест'),'FBLK 291')
+  self.assertEqual(catalog.photo_filename(catalog.canonical_article('FBLK291','Тест')),catalog.photo_filename('FBLK 291'))
+ def test_punctuation_leading_zeros_and_brands_are_distinct(self):
+  for a in ['ЗК2027-Вбр','ЗК02027/Вбр','ЗК2027/Вбр.']:
+   self.assertNotEqual(key(a,'Каратник'),key('ЗК2027/Вбр','Каратник'))
+  self.assertNotEqual(key('ЗК2027/Вбр','Другой'),key('ЗК2027 /Вбр','Каратник'))
+
 if __name__=='__main__':unittest.main()

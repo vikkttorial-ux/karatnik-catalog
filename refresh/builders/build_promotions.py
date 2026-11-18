@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parent
 WORK=ROOT.parents[1]/'work'
 CAT=ROOT.parent/'karatnik-catalog/site'
 sys.path.insert(0,str(CAT.parent))
-from catalog import canonical_article
+from catalog import canonical_article, configure_article_spellings
 def read(p):return json.loads(p.read_text(encoding='utf-8'))
 def key(a,b):return canonical_article(a,b)+'|'+str(b).strip().casefold()
 def positive_weight(value):
@@ -112,6 +112,7 @@ def build():
  from catalog import normalize_size
  today=datetime.now(timezone(timedelta(hours=3))).date();end=today.isoformat();events=(today-timedelta(days=29)).isoformat()
  stock=read(ROOT/'stock.json');sales=read(ROOT/'data.json');master=read(WORK/'source-sept21.json');supp=read(WORK/'supplement-articles.json')
+ configure_article_spellings(master['values'])
  live=snapshot_products(stock['items']);meta={};upcoming={};arrivals=defaultdict(list);refs={}
  confirmation_path=WORK/'confirmed-receipts.json'
  confirmed_receipts={(r['code'],r['date'],r['brand']) for r in read(confirmation_path)['receipts']} if confirmation_path.exists() else set()

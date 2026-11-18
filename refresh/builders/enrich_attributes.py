@@ -1,6 +1,6 @@
 """Fill absent characteristics from the approved article/brand reference only."""
 import json
-from catalog import canonical_article
+from catalog import canonical_article, configure_article_spellings
 from collections import defaultdict, Counter
 from pathlib import Path
 
@@ -39,6 +39,7 @@ def enrich(data, rows, overrides):
 def main():
     read=lambda p:json.loads(p.read_text(encoding='utf-8'))
     rows=read(ROOT/'work/supplement-articles.json')['values']
+    configure_article_spellings(read(ROOT/'work/source-sept21.json')['values'])
     overrides=read(Path(__file__).with_name('config.json')).get('article_characteristic_overrides',{})
     dashboard=ROOT/'outputs/owner-dashboard'
     stock=read(dashboard/'stock.json'); before={i['art']:(i['units'],i['stocks'],i['sizes'],i['photo']) for i in stock['items']}

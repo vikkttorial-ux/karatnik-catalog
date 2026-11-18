@@ -8,7 +8,8 @@ sales=read(root/'data.json');stock=read(root/'stock.json')
 source=read(workspace/'work/source-sept21.json')['values']
 raw=read(workspace/'work/owner-store-sales-v2.json')
 sys.path.insert(0,str(workspace/'outputs/karatnik-catalog'))
-from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES, unit_number, canonical_article
+from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES, unit_number, canonical_article, configure_article_spellings
+configure_article_spellings(source)
 for sale in sales['items']:
     sale['art']=canonical_article(sale.get('art'),sale.get('brand'))
 (root/'data.json').write_text(json.dumps(sales,ensure_ascii=False),encoding='utf-8')

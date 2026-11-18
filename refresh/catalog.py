@@ -160,13 +160,38 @@ def normalize_stock(value, aliases):
     return value, value not in KNOWN_STOCKS
 
 
-def canonical_article(art, brand):
-    """Owner-confirmed GoldenGlob aliases; size remains a unit attribute."""
-    art = str(art or '').strip()
+_ARTICLE_SPELLINGS = {}
+
+
+def article_identity(art, brand):
+    """Whitespace does not distinguish models; punctuation and brand still do."""
+    art = re.sub(r'\s+', '', str(art or ''))
     if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
             and re.fullmatch(r'(?:Кольцо)?КЛ-63(?:/\d+(?:[,.]\d+)?/бцФ/з585)?', art, re.I)):
         return 'КЛ-63'
     return art
+
+
+def configure_article_spellings(rows, art_col=3, brand_col=0, header_rows=1):
+    """Use one source spelling while keeping existing display names and photo keys."""
+    _ARTICLE_SPELLINGS.clear()
+    for row in rows[header_rows:]:
+        if max(art_col, brand_col) >= len(row):
+            continue
+        art, brand = text(row[art_col]), text(row[brand_col])
+        if not art:
+            continue
+        identity = article_identity(art, brand)
+        preferred = 'КЛ-63' if identity == 'КЛ-63' and re.sub(r'\s+', '', brand).casefold() == 'голденглоб' else art
+        _ARTICLE_SPELLINGS.setdefault((identity, brand.casefold()), preferred)
+
+
+def canonical_article(art, brand):
+    art = text(art)
+    if art.startswith('Без артикула · '):
+        return art
+    identity = article_identity(art, brand)
+    return _ARTICLE_SPELLINGS.get((identity, text(brand).casefold()), identity)
 
 
 def photo_filename(art):
@@ -303,6 +328,7 @@ def analyze(values, config, photos=None, generated_at=None):
     if not values:
         raise BuildError('Источник пуст: нет строки заголовков.')
     columns = resolve_headers(values[0], config)
+    configure_article_spellings(values, columns['art'], columns['marka'])
     log, blockers = [], []
     groups = defaultdict(list)
     inventory = 0
