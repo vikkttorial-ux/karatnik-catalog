@@ -32,7 +32,7 @@ def apply_verified_labels(path,master,stock,sales,owner,catalog):
     today=datetime.now(timezone(timedelta(hours=3))).date().isoformat()
     if verified['date']!=today or verified['source_signature']!=source_signature(master['values']) or verified['stock_signature']!=stock_signature(stock):
         raise RuntimeError('Проверенные метки требуют свежего пересчёта с сохранённой историей. Предыдущая публикация сохранена.')
-    allowed={'Новинка','Новинка месяца','Скоро в продаже','Вернулись в наличие','Пополнили размеры'}
+    allowed={'Новинка','Новинка месяца','Последнее поступление','Скоро в продаже','Вернулись в наличие','Пополнили размеры'}
     for item in verified['items'].values():
         if set(item)-{'tags','replenished_sizes','expected_date'} or set(item['tags'])-allowed:
             raise RuntimeError('Недопустимые поля проверенных публичных меток.')
@@ -45,6 +45,10 @@ def apply_verified_labels(path,master,stock,sales,owner,catalog):
         tags+=entry.get('tags',[])
         if tags:final[key]={**entry,'tags':tags}
     generated['items']=final
+    latest=verified.get('latest_receipt_date')
+    if latest is not None and (not isinstance(latest,str) or latest>today):
+        raise RuntimeError('Некорректная дата подтверждённого поступления.')
+    generated['latest_receipt_date']=latest
     for target in (Path(owner)/'promotions.json',Path(catalog)/'site/promotions.json'):
         target.write_text(json.dumps(generated,ensure_ascii=False),encoding='utf8')
     print('Проверенные публичные метки применены к точным текущим источникам.')

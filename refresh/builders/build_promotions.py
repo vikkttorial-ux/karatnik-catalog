@@ -7,13 +7,15 @@ from collections import defaultdict, Counter
 ROOT=Path(__file__).resolve().parent
 WORK=ROOT.parents[1]/'work'
 CAT=ROOT.parent/'karatnik-catalog/site'
+sys.path.insert(0,str(CAT.parent))
+from catalog import canonical_article
 def read(p):return json.loads(p.read_text(encoding='utf-8'))
-def key(a,b):return str(a).strip()+'|'+str(b).strip().casefold()
+def key(a,b):return canonical_article(a,b)+'|'+str(b).strip().casefold()
 def positive_weight(value):
  try:return float(str(value).strip().replace(' ','').replace(',','.'))>0
  except (ValueError,TypeError):return False
 
-def master_promotion_facts(rows):
+def master_promotion_facts(rows, confirmed_receipts=None):
  """Return master-only plans, current presence, and manual soon labels."""
  headers={str(v).strip():i for i,v in enumerate(rows[0]) if v is not None}
  art_i=headers.get('Артикул');brand_i=headers.get('Марка/бренд',headers.get('Марка/брендК'));date_i=headers.get('Ожидаемая дата поступления',headers.get('Ожидаемая дата'))
@@ -30,7 +32,8 @@ def master_promotion_facts(rows):
   k=key(art,brand);planned=date_value(value(date_i))
   if planned:expected[k]=planned
   if 'скоро' in value(label_i).lower().replace('ё','е'):manual_soon.add(k)
-  if positive_weight(value(weight_i)) and not value(sale_i) and not value(service_i):available.add(k)
+  receipt=(value(headers.get('Код')),date_value(value(headers.get('Дата прихода'))),brand)
+  if (positive_weight(value(weight_i)) or receipt in (confirmed_receipts or set())) and not value(sale_i) and not value(service_i):available.add(k)
  return expected,available,manual_soon
 
 def supplement_soon_counts(rows):
@@ -52,9 +55,34 @@ def is_upcoming(expected_date, master_available, today):
  planned=date_value(expected_date)
  return bool(planned and planned>today.isoformat() and not master_available)
 
-def is_new_arrival(first_arrival, today, master_available):
- recent=(today-timedelta(days=89)).isoformat()
+def is_new_arrival(first_arrival, today, master_available, days=60):
+ recent=(today-timedelta(days=days-1)).isoformat()
  return bool(master_available and first_arrival and recent<=first_arrival<=today.isoformat())
+
+def latest_confirmed_receipt(rows, today, confirmed_receipts=None):
+ h={str(v).strip():i for i,v in enumerate(rows[0]) if v is not None}
+ dates=[]
+ for row in rows[1:]:
+  def v(name):
+   i=h.get(name)
+   return row[i] if i is not None and i<len(row) else ''
+  received=date_value(v('Дата прихода'))
+  owner_confirmed=(str(v('Код') or '').strip(),received,str(v('Марка/бренд') or v('Марка/брендК') or '').strip()) in (confirmed_receipts or set())
+  if (received and received<=today.isoformat() and (positive_weight(v('Остаток гр')) or owner_confirmed)
+      and not v('Дата продажи') and not v('Наименование услуги')):
+   dates.append(received)
+ return max(dates,default=None)
+
+def snapshot_products(items):
+ merged={}
+ for p in items:
+  k=key(p['art'],p['marka'])
+  entry=merged.setdefault(k,{'units':0,'sizes':[]})
+  entry['units']+=p['units']
+  sizes=Counter({s['s']:s.get('q',0) for s in entry['sizes']})
+  sizes.update({s['s']:s.get('q',0) for s in p.get('sizes',[])})
+  entry['sizes']=[{'s':s,'q':q} for s,q in sizes.items()]
+ return merged
 
 def is_returned_after_sellout(previous_positive, gap_snapshot, replenishment, sales_dates, receipt_dates, window_start):
  """A return needs a recorded zero-stock interval, a sale, and a later master receipt."""
@@ -84,8 +112,11 @@ def build():
  from catalog import normalize_size
  today=datetime.now(timezone(timedelta(hours=3))).date();end=today.isoformat();events=(today-timedelta(days=29)).isoformat()
  stock=read(ROOT/'stock.json');sales=read(ROOT/'data.json');master=read(WORK/'source-sept21.json');supp=read(WORK/'supplement-articles.json')
- live={key(p['art'],p['marka']):p for p in stock['items']};meta={};upcoming={};arrivals=defaultdict(list);refs={}
- expected,master_available,master_manual_soon=master_promotion_facts(master['values']);overdue_waiting=0;unplanned_waiting=0
+ live=snapshot_products(stock['items']);meta={};upcoming={};arrivals=defaultdict(list);refs={}
+ confirmation_path=WORK/'confirmed-receipts.json'
+ confirmed_receipts={(r['code'],r['date'],r['brand']) for r in read(confirmation_path)['receipts']} if confirmation_path.exists() else set()
+ expected,master_available,master_manual_soon=master_promotion_facts(master['values'],confirmed_receipts);overdue_waiting=0;unplanned_waiting=0
+ latest_receipt=latest_confirmed_receipt(master['values'],today,confirmed_receipts)
  supplement_soon,supplement_soon_unplanned=supplement_soon_counts(supp['values'])
  def ingest(rows,headerrow,mapping,collect_arrivals=False):
   h={str(v).strip():i for i,v in enumerate(rows[headerrow])}
@@ -96,6 +127,7 @@ def build():
     i=next((h[t] for t in aliases.get(title,[title]) if t in h),None)
     return str(row[i]).strip() if i is not None and i<len(row) and row[i] is not None else ''
    art,brand=v('art'),v('brand')
+   art=canonical_article(art,brand)
    if not art or not brand:continue
    k=key(art,brand)
    dt=date_value(v('arrival'))
@@ -116,7 +148,7 @@ def build():
  snapshots={stock['generated_at']:live}
  for path in sorted(WORK.glob('backup-refresh*/stock.json')):
   s=read(path)
-  if s.get('generated_at'):snapshots[s['generated_at']]={key(p['art'],p['marka']):p for p in s['items']}
+  if s.get('generated_at'):snapshots[s['generated_at']]=snapshot_products(s['items'])
  ordered=sorted(snapshots.items());sale_dates=defaultdict(list)
  for sale in sales['items']:
   if sale['kind']=='Продажа изделий':sale_dates[key(sale.get('art',''),sale.get('brand',''))].append(sale['date'])
@@ -151,7 +183,9 @@ def build():
   if k in live:
    if sizes:tags.append('Пополнили размеры')
   if sizes:entry['replenished_sizes']=sorted(sizes)
-  if first and first>=end[:7]+'-01' and k in live and k in master_available and 'Новинка' in tags:tags.append('Новинка месяца')
+  if k in live and 'Новинка' in tags and is_new_arrival(first,today,k in master_available,days=30):
+   tags.append('Новинка месяца')
+   if first==latest_receipt:tags.append('Последнее поступление')
   if k in upcoming:
    sys.path.insert(0,str(CAT.parent))
    from catalog import photo_filename
@@ -159,7 +193,7 @@ def build():
    if (CAT/'photos'/name).is_file():upcoming[k]['photo']='photos/'+quote(name,safe='-_.')
   if tags:meta[k]=entry
  # Only explicitly expected products enter the showcase; inventory stays untouched.
- out={'generated_at':stock['generated_at'],'items':meta,'upcoming':list(upcoming.values())}
+ out={'generated_at':stock['generated_at'],'items':meta,'upcoming':list(upcoming.values()),'latest_receipt_date':latest_receipt}
  for target in (ROOT/'promotions.json',CAT/'promotions.json'):target.write_text(json.dumps(out,ensure_ascii=False),encoding='utf-8')
  print(json.dumps({'selections':dict(Counter(t for e in meta.values() for t in e['tags'])),'upcoming':len(upcoming),'master_planned':len(expected),'overdue_waiting':overdue_waiting,'unplanned_waiting':unplanned_waiting,'supplement_manual_soon':supplement_soon,'supplement_soon_without_plan':supplement_soon_unplanned},ensure_ascii=False))
 if __name__=='__main__':build()

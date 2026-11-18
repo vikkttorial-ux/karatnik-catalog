@@ -19,3 +19,19 @@ assert.equal(campaignForItem({art:'ЗК1002/ВБр.',marka:'Каратник'},d
 assert.throws(()=>validateCampaign({...data,items:[data.items[0],data.items[0]]}));
 assert.throws(()=>validateCampaign({...data,items:[{...data.items[0],discount_percent:150}]}));
 console.log('Акция: 94 артикула, сроки по Москве, проценты, разные варианты и сохранение других меток проверены.');
+
+import {defaultPromotionOrder} from './catalog-assets/promotion-core.mjs';
+import {prepareItems,filterItems,blankState} from './catalog-assets/catalog-core.mjs';
+const sample=[
+ {art:'ordinary',promotions:{tags:[]}},
+ {art:'new',promotions:{tags:['Новинка']}},
+ {art:'month',promotions:{tags:['Новинка','Новинка месяца']}},
+ {art:'latest',promotions:{tags:['Новинка','Новинка месяца','Последнее поступление']}}
+];
+assert.deepEqual(defaultPromotionOrder(sample,blankState()).map(x=>x.art),['latest','month','new','ordinary']);
+assert.deepEqual(sample.map(x=>x.art),['ordinary','new','month','latest']);
+for(const state of [{q:'кольцо'},{stock:'Ленинградская 33'},{tip:'Кольцо'}])assert.equal(defaultPromotionOrder(sample,{...blankState(),...state}),sample);
+const model=prepareItems([{art:'КЛ-63',marka:'ГолденГлоб',naim:'Кольцо',sizes:[{s:'17',q:1}],codes:['ЮР-1'],stocks:{A:1},units:1}]);
+for(const q of ['КЛ-63','КольцоКЛ-63','КольцоКЛ-63/17,0/бцФ/з585'])assert.equal(filterItems(model,{...blankState(),q}).length,1);
+assert.equal(filterItems(model,{...blankState(),q:'КольцоКЛ-63/17,0/бцФ/бз585'}).length,0);
+console.log('Default new-first ordering, active-filter order and confirmed article aliases passed');

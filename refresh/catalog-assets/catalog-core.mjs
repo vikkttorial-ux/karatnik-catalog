@@ -11,9 +11,14 @@ export const codeNumber = value => {
   const match=compact(value).match(/^(?:юр)?(\d+)$/);
   return match ? match[1].replace(/^0+(?=\d)/,'') : '';
 };
+export function articleSearchAliases(item) {
+ if(item.art!=='КЛ-63'||String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')!=='голденглоб')return [];
+ const sizes=(item.sizes||[]).map(x=>Number(String(x.s).replace(',','.'))).filter(Number.isFinite);
+ return ['КольцоКЛ-63',...sizes.map(s=>'КольцоКЛ-63/'+s.toFixed(1).replace('.',',')+'/бцФ/з585')];
+}
 export function prepareItems(items) {
   return items.map(item => ({...item,
-    _search:normalize([item.art,item.naim,item.vstavka,item.marka,...(item.promotions?.tags||[])].join(' ')),
+    _search:normalize([item.art,...articleSearchAliases(item),item.naim,item.vstavka,item.marka,...(item.promotions?.tags||[])].join(' ')),
     _art:compact(item.art),
     _codes:(item.codes||[]).map(compact),
     _codeNumbers:(item.codes||[]).map(codeNumber).filter(Boolean)
@@ -113,3 +118,4 @@ export function formatUnitDetails(entry) {
     size: entry.size ? 'Размер '+entry.size : 'Размер —'
   };
 }
+

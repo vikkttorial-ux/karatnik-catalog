@@ -1,13 +1,15 @@
 """Build receipt evidence; never turn year-only dates into exact arrivals."""
-import json
+import json, sys
 from pathlib import Path
 from datetime import date, datetime, timedelta, timezone
 from collections import defaultdict
 
 ROOT = Path(__file__).resolve().parent
 WORK = ROOT.parents[1] / 'work'
+sys.path.insert(0,str(ROOT.parent/'karatnik-catalog'))
+from catalog import canonical_article
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
-def key(art, brand): return str(art or '').strip() + '|' + str(brand or '').strip().casefold()
+def key(art, brand): return canonical_article(art,brand) + '|' + str(brand or '').strip().casefold()
 
 def parse_date(value):
     if value is None or str(value).strip() == '': return None, 'missing'

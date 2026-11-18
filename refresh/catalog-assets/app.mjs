@@ -1,7 +1,7 @@
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=attrs-1109';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=labels-1118';
 
-import {SELECTIONS,showcase,promotionInfo} from './promotion-core.mjs';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=labels-1118';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
 import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=attrs-1109';
 const $=id=>document.getElementById(id);
@@ -105,7 +105,7 @@ function render() {
   // Запоминаем контейнер до замены элементов для клавиатурной навигации.
   const focusHost=oldFocus?.closest('#mobile-filters,#desktop-filters,#types')?.id;
   const focusKey=oldFocus?.dataset.key,focusValue=oldFocus?.dataset.value;
-  filtered=filterItems(items,state);
+  filtered=defaultPromotionOrder(filterItems(items,state),state);
   const counts=Object.fromEntries(FILTER_KEYS.map(key=>[key,facetCounts(items,state,key)]));
   const isRing=state.tip==='Кольцо';
   $('ring-kind-filter').hidden=!isRing;
@@ -193,7 +193,7 @@ function card(item) {
   body.append(heading,tags);appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);
   const stickers=el('div','photo-stickers');
   const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
-  const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
+  const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Последнее поступление':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
   for(const label of item.promotions?.tags||[])stickers.append(el('span','photo-sticker '+(colors[label]||''),titles[label]||label));
   visual.append(stickers);
   if(item.campaign){const end=item.campaign.ends_on.split('-').reverse().join('.');body.append(el('p','campaign-detail',`Скидка от ПРЦ: ${item.campaign.discount_percent}%. По ${end} включительно. Обычные 20% не суммируются.`));}
@@ -304,3 +304,4 @@ new ResizeObserver(()=>document.documentElement.style.setProperty('--header-heig
 if('IntersectionObserver' in window) new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)&&shown<filtered.length) appendCards();},{rootMargin:'350px'}).observe($('load-more-wrap'));
 setInterval(()=>{updateFreshness();if(items.length&&campaignManifest&&campaignDay()!==lastCampaignDay){lastCampaignDay=campaignDay();items=prepareItems(items.map(item=>withCampaign(item,campaignManifest)));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();}},60000);
 load();
+

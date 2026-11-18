@@ -160,6 +160,15 @@ def normalize_stock(value, aliases):
     return value, value not in KNOWN_STOCKS
 
 
+def canonical_article(art, brand):
+    """Owner-confirmed GoldenGlob aliases; size remains a unit attribute."""
+    art = str(art or '').strip()
+    if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
+            and re.fullmatch(r'(?:Кольцо)?КЛ-63(?:/\d+(?:[,.]\d+)?/бцФ/з585)?', art, re.I)):
+        return 'КЛ-63'
+    return art
+
+
 def photo_filename(art):
     """Недопустимые символы и % кодируем байтами UTF-8; прочие сохраняем."""
     def escaped(char):
@@ -306,6 +315,7 @@ def analyze(values, config, photos=None, generated_at=None):
     stock_counts = Counter()
     for number, cells in enumerate(values[1:], 2):
         row = {key: text(cells[i]) if i < len(cells) else '' for key, i in columns.items()}
+        row['art'] = canonical_article(row['art'], row['marka'])
         if not any(row.values()):
             blank_rows += 1
             continue
@@ -415,7 +425,8 @@ def analyze(values, config, photos=None, generated_at=None):
         item.update(units=len(records), stocks=dict(sorted(stocks.items())),
                     sizes=[{'s': s, 'q': sizes[s]} for s in sorted(sizes, key=size_key)],
                     stock_codes={stock:stock_codes[stock] for stock in sorted(stocks)})
-        filename = photo_filename(art)
+        photo_art = 'КольцоКЛ-63' if art == 'КЛ-63' and item['marka'].replace(' ', '').casefold() == 'голденглоб' else art
+        filename = photo_filename(photo_art)
         item['photo'] = 'photos/' + quote(filename, safe='-_.') if art not in technical_keys and photos and (Path(photos) / filename).is_file() else ''
         items.append(item)
     data = {'generated_at': generated_at or datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z'), 'items': items}

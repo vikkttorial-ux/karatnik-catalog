@@ -8,7 +8,10 @@ sales=read(root/'data.json');stock=read(root/'stock.json')
 source=read(workspace/'work/source-sept21.json')['values']
 raw=read(workspace/'work/owner-store-sales-v2.json')
 sys.path.insert(0,str(workspace/'outputs/karatnik-catalog'))
-from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES, unit_number
+from catalog import resolve_headers, normalize_stock, normalize_size, ERROR_VALUES, unit_number, canonical_article
+for sale in sales['items']:
+    sale['art']=canonical_article(sale.get('art'),sale.get('brand'))
+(root/'data.json').write_text(json.dumps(sales,ensure_ascii=False),encoding='utf-8')
 from build_marketing import parse_date
 config=read(workspace/'outputs/karatnik-catalog/config.json')
 columns=resolve_headers(source[0],config)
@@ -20,7 +23,7 @@ def code(v):
     s=text(v)
     if s.endswith('.0'):s=s[:-2]
     return re.sub(r'\D','',s).lstrip('0')
-def key(art,brand):return text(art)+'|'+text(brand).casefold()
+def key(art,brand):return canonical_article(art,brand)+'|'+text(brand).casefold()
 header={text(v):i for i,v in reversed(list(enumerate(source[0])))}
 bycode=defaultdict(list)
 for row in source[1:]:
@@ -47,7 +50,7 @@ for cells in source[1:]:
     row={field:text(cells[i]) if i<len(cells) else '' for field,i in columns.items()}
     if row['service'] or not any(row.values()):continue
     if row['code']=='ЮР-000' and not any(v for k,v in row.items() if k!='code'):continue
-    art=row['art'] or 'Без артикула · '+row['code']
+    art=canonical_article(row['art'],row['marka']) or 'Без артикула · '+row['code']
     p=stock_by_art.get(art)
     if not p:raise ValueError('Inventory row missing from catalog')
     row.update(config.get('article_characteristic_overrides',{}).get(art,{}))

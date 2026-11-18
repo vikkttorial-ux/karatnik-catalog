@@ -1,5 +1,6 @@
 """Fill absent characteristics from the approved article/brand reference only."""
 import json
+from catalog import canonical_article
 from collections import defaultdict, Counter
 from pathlib import Path
 
@@ -20,7 +21,7 @@ def enrich(data, rows, overrides):
     lookup = defaultdict(list)
     for row in rows[2:]:
         r = row + [''] * max(0,len(rows[1])-len(row))
-        lookup[(text(r[header['Артикул']]),text(r[header['Бренд']]).casefold())].append(r)
+        lookup[(canonical_article(text(r[header['Артикул']]),text(r[header['Бренд']])),text(r[header['Бренд']]).casefold())].append(r)
     changes = []
     for item in data['items']:
         matches = lookup.get((item['art'],item['marka'].strip().casefold()),[])
