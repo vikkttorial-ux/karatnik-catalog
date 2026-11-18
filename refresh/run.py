@@ -41,7 +41,7 @@ class Reader:
   if r.status_code in (403,404):raise RuntimeError('Нет доступа к источнику '+url.split('/spreadsheets/')[-1].split('/')[0]+'. Выдайте право «Читатель» аккаунту '+self.email)
   if not r.ok:raise RuntimeError('Ошибка чтения Google: HTTP '+str(r.status_code))
   return r.json()
- def rows(self,file,tab,header_row=1,allowed=None,required=()):
+ def rows(self,file,tab,header_row=1,allowed=None,required=(),value_render_option='FORMATTED_VALUE'):
   base='https://sheets.googleapis.com/v4/spreadsheets/'+file
   meta=self.get(base,{'fields':'sheets(properties(sheetId,title,gridProperties))'});prop=next((s['properties'] for s in meta['sheets'] if s['properties']['title']==tab),None)
   if not prop:raise RuntimeError('Не найден лист '+tab)
@@ -53,7 +53,7 @@ class Reader:
   if missing:raise RuntimeError('Изменились заголовки '+tab+': '+', '.join(sorted(missing)))
   indexes=[i for i,v in enumerate(header) if allowed is None or str(v).strip() in allowed];rows=[[] for _ in range(header_row-1)]+[header]
   for offset in range(0,len(indexes),30):
-   part=indexes[offset:offset+30];params=[('valueRenderOption','FORMATTED_VALUE')]+[('ranges',f'{sheet}!{col(i)}{header_row+1}:{col(i)}{height}') for i in part]
+   part=indexes[offset:offset+30];params=[('valueRenderOption',value_render_option)]+[('ranges',f'{sheet}!{col(i)}{header_row+1}:{col(i)}{height}') for i in part]
    ranges=self.get(base+'/values:batchGet',params).get('valueRanges',[])
    if len(ranges)!=len(part):raise RuntimeError('Неполный ответ Google: '+tab)
    for index,column in zip(part,ranges):
@@ -82,7 +82,7 @@ def build(fixtures=None):
   allowed={'Артикул','Бренд','Наименование изделия','Полн/Пуст','Характеристика 2','Характеристика 3','Толщина','Проба','Цвет','Вставки полностью','Вставки','Тип замка','Основной камень (вставки)','Цвет камня','Тип огранки','Дата прихода','Размер','Группа вставки','Название на сайте','Метка','Ожидается (дата)'}
   sr=reader.rows(SUPPLEMENT,'Артикулы',2,allowed,{'Артикул','Бренд','Характеристика 2','Тип замка'});sources=[]
   for file,stock in [('1pyv0zCDJFdHC36pxK99neo6uNUw8rl8Hu5d6d0DY4II','Ленинградская 33'),('1sGLiSfctiOHUN_ncirhwVTWl8LyMSE1R1djZWsMkYtg','Гостинка (В.Е.Левин)')]:
-   rows=reader.rows(file,'Продажи')
+   rows=reader.rows(file,'Продажи',value_render_option='UNFORMATTED_VALUE')
    if not valid_sales_header(rows[0]):raise RuntimeError('Изменились колонки продаж.')
    sources.append({'id':file,'stock':stock,'rows':[r[:16] for r in rows]})
   stamp=datetime.now(timezone.utc).isoformat();master={'values':mr,'read_at':stamp};supp={'values':sr,'read_at':stamp};sales={'sources':sources,'read_at':stamp}
