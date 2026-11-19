@@ -12,11 +12,7 @@ export function productPhotos(item) {
 }
 function styles() {
   if(document.getElementById('photo-gallery-style'))return;
-  const css=document.createElement('style');css.id='photo-gallery-style';css.textContent=`
-  .photo-gallery-host{position:relative}.photo-gallery-nav{display:flex;align-items:center;justify-content:center;gap:12px;position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:5;padding:4px;border-radius:24px;background:rgba(255,255,255,.96);color:#192322;box-shadow:0 2px 8px #0002;white-space:nowrap}
-  .photo-gallery-nav button{display:grid;place-items:center;min-width:36px;min-height:36px;border:1px solid #d7deda;border-radius:50%;background:white;color:#192322;font-size:24px;cursor:pointer;padding:0}.photo-gallery-nav button:focus-visible{outline:3px solid #41786b;outline-offset:2px}.photo-gallery-nav span{font-size:14px;font-variant-numeric:tabular-nums;min-width:42px;text-align:center}
-  .photo-gallery-host img{touch-action:pan-y}.product-card>.photo-gallery-host{aspect-ratio:1;width:100%}.product-card>.photo-gallery-host>img{width:100%;height:100%;object-fit:contain;margin:0}.photo-gallery-nav[hidden]{display:none}
-  `;document.head.append(css);
+  const css=document.createElement('link');css.id='photo-gallery-style';css.rel='stylesheet';css.href=new URL('./photo-gallery.css?v=gallery-1119',import.meta.url).href;document.head.append(css);
 }
 export function mountPhotoGallery(container,img,item,{start=0,onChange=()=>{}}={}) {
   const photos=productPhotos(item);if(!photos.length)return ()=>{};
