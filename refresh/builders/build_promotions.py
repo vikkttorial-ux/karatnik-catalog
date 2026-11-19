@@ -75,7 +75,21 @@ def latest_confirmed_receipt(rows, today, confirmed_receipts=None):
 
 def snapshot_products(items):
  merged={}
+ expanded=[]
  for p in items:
+  if p['art']=='БрЛТннс01' and str(p['marka']).replace(' ','').casefold()=='голденглоб':
+   by_color=defaultdict(list)
+   for entries in p.get('stock_codes',{}).values():
+    for entry in entries:
+     if entry.get('cvet') in ('КР','Б'):by_color[entry['cvet']].append(entry)
+   if by_color and sum(map(len,by_color.values()))==p['units']:
+    for color,entries in by_color.items():
+     sizes=Counter(e['size'] for e in entries if e.get('size'))
+     expanded.append({'art':'БрЛТннс01_бцФ_'+('бз585' if color=='Б' else 'з585'),'marka':p['marka'],'units':len(entries),'sizes':[{'s':s,'q':q} for s,q in sizes.items()]})
+    continue
+  # Preserve an ambiguous historical model intact when a complete split is unavailable.
+  expanded.append(p)
+ for p in expanded:
   k=key(p['art'],p['marka'])
   entry=merged.setdefault(k,{'units':0,'sizes':[]})
   entry['units']+=p['units']

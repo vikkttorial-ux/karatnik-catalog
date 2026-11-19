@@ -169,8 +169,8 @@ def article_identity(art, brand):
     if re.sub(r'\s+', '', str(brand or '')).casefold() == 'каратов':
         art = re.sub(r'-РА$', '', art, flags=re.I)
     if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
-            and re.fullmatch(r'БрЛТннс01(?:_\d+(?:[,.]\d+)?см_бцФ_(?:з585|бз585))?', art, re.I)):
-        return 'БрЛТннс01'
+            and (match := re.fullmatch(r'БрЛТннс01(?:_\d+(?:[,.]\d+)?см)?_бцФ_(з585|бз585)', art, re.I))):
+        return 'БрЛТннс01_бцФ_' + match[1].lower()
     if (re.sub(r'\s+', '', str(brand or '')).casefold() == 'голденглоб'
             and re.fullmatch(r'(?:Кольцо)?КЛ-63(?:/\d+(?:[,.]\d+)?/бцФ/з585)?', art, re.I)):
         return 'КЛ-63'
@@ -351,6 +351,11 @@ def analyze(values, config, photos=None, generated_at=None):
         if not any(row.values()):
             blank_rows += 1
             continue
+        if (config.get('ignore_empty_code_templates') and row.get('tip')
+                and not any(v for k,v in row.items() if k != 'tip')):
+            ignored_templates += 1
+            event(log, 'ЗАГОТОВКА ТОЛЬКО С ВИДОМ ИЗДЕЛИЯ ИСКЛЮЧЕНА', number)
+            continue
         if (config.get('ignore_empty_code_templates') and row['code'] == 'ЮР-000'
                 and not any(v for k, v in row.items() if k != 'code')):
             ignored_templates += 1
@@ -443,12 +448,12 @@ def analyze(values, config, photos=None, generated_at=None):
         if len(colors) > 1:
             item['details']['cvet'] = colors
         for field, value in config.get('article_characteristic_overrides', {}).get(art, {}).items():
-            if field in ('char2', 'char3'):
+            if field in ('char2', 'char3', 'cvet', 'kamni', 'vstavka'):
                 if field in item:
                     item[field] = value
-                if value:
+                if value and field in ('char2', 'char3', 'vstavka'):
                     item['details'][field] = [value]
-                else:
+                elif field in ('char2', 'char3', 'vstavka'):
                     item['details'].pop(field, None)
         item['codes'] = sorted({r['code'] for r in records if r['code']})
         item['tip'] = item['tip'] or 'Не определено'

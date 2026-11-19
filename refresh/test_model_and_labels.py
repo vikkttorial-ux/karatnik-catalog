@@ -64,11 +64,22 @@ class ConfirmedAliases(unittest.TestCase):
   catalog.configure_article_spellings([])
  def tearDown(self):
   catalog.configure_article_spellings([])
- def test_tennis_bracelet_is_one_model_for_sizes_and_gold_colors(self):
+ def test_tennis_bracelet_lengths_merge_but_gold_colors_stay_separate(self):
   arts=['БрЛТннс01_17см_бцФ_з585','БрЛТннс01_18см_бцФ_з585','БрЛТннс01_18см_бцФ_бз585']
-  for a in arts:self.assertEqual(catalog.canonical_article(a,'ГолденГлоб'),'БрЛТннс01')
+  expected=['БрЛТннс01_бцФ_з585','БрЛТннс01_бцФ_з585','БрЛТннс01_бцФ_бз585']
+  for art,canonical in zip(arts,expected):self.assertEqual(catalog.canonical_article(art,'ГолденГлоб'),canonical)
   result=snapshot_products([{'art':a,'marka':'ГолденГлоб','units':1,'sizes':[{'s':'17' if i==0 else '18','q':1}]} for i,a in enumerate(arts)])
-  self.assertEqual(result['БрЛТннс01|голденглоб']['units'],3)
+  self.assertEqual(len(result),2)
+  self.assertEqual(result[key(expected[0],'ГолденГлоб')]['units'],2)
+  self.assertEqual(result[key(expected[2],'ГолденГлоб')]['units'],1)
+ def test_legacy_bracelet_history_splits_only_when_every_unit_color_is_known(self):
+  complete={'art':'БрЛТннс01','marka':'ГолденГлоб','units':3,'sizes':[{'s':'17','q':1},{'s':'18','q':2}], 'stock_codes':{'Гостинка':[{'cvet':'КР','size':'17'},{'cvet':'Б','size':'18'}],'Ленинградка':[{'cvet':'КР','size':'18'}]}}
+  result=snapshot_products([complete])
+  self.assertEqual(len(result),2)
+  self.assertEqual(sum(p['units'] for p in result.values()),3)
+  partial={**complete,'units':4}
+  result=snapshot_products([partial])
+  self.assertEqual(result[key('БрЛТннс01','ГолденГлоб')]['units'],4)
   self.assertEqual(len(result),1)
  def test_karatov_suffix_is_not_a_new_model(self):
   self.assertEqual(key('ЦНН20517035-РА','Каратов'),key('ЦНН20517035','Каратов'))

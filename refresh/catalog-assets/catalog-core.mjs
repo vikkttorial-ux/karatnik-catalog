@@ -13,7 +13,7 @@ export const codeNumber = value => {
 };
 export function articleSearchAliases(item) {
  if(String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')==='каратов')return [item.art+'-РА'];
- if(item.art==='БрЛТннс01'&&String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')==='голденглоб')return Object.values(item.stock_codes||{}).flat().map(e=>'БрЛТннс01_'+e.size+'см_бцФ_'+(e.cvet==='Б'?'бз585':'з585'));
+ if(/^БрЛТннс01(?:_бцФ_(?:з585|бз585))?$/.test(item.art)&&String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')==='голденглоб')return Object.values(item.stock_codes||{}).flat().map(e=>'БрЛТннс01_'+e.size+'см_бцФ_'+((e.cvet||item.cvet)==='Б'?'бз585':'з585'));
  if(item.art!=='КЛ-63'||String(item.marka||'').replace(/\s/g,'').toLocaleLowerCase('ru')!=='голденглоб')return [];
  const sizes=(item.sizes||[]).map(x=>Number(String(x.s).replace(',','.'))).filter(Number.isFinite);
  return ['КольцоКЛ-63',...sizes.map(s=>'КольцоКЛ-63/'+s.toFixed(1).replace('.',',')+'/бцФ/з585')];
@@ -89,7 +89,7 @@ export function isApprovedPhotoUrl(value) {
   return typeof value==='string' && /^https:\/\/karatnik-product-photos\.workspace-903713\.chatgpt\.site\/api\/images\/[0-9a-f-]{36}$/i.test(value);
 }
 export function hasProductPhoto(item) {
-  return validPhotoPath(item?.photo) || (item?.photoSource==='approved' && isApprovedPhotoUrl(item.photo));
+  return validPhotoPath(item?.photo) || (item?.photoSource==='approved' && (isApprovedPhotoUrl(item.photo) || /^https:\/\/vikkttorial-ux\.github\.io\/karatnik-catalog\/photos\/[^/]+\.webp$/i.test(item.photo||'')));
 }
 export function validateData(data) {
   if(!data || !Array.isArray(data.items) || !Number.isFinite(Date.parse(data.generated_at))) throw new Error('Некорректный файл каталога');

@@ -1,9 +1,10 @@
+import {mountPhotoGallery} from './photo-gallery.mjs?v=gallery-1119';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=variants-1118';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=gallery-1119';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=variants-1118';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=gallery-1119';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=attrs-1109';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=gallery-1119';
 const $=id=>document.getElementById(id);
 fetch('staff-config.json',{cache:'no-store'})
   .then(response=>response.ok?response.json():null)
@@ -170,9 +171,11 @@ function render() {
 function placeholder() {
   const node=el('div','photo-placeholder');node.innerHTML=photoIcon;node.append(el('span','','Нет фото'));return node;
 }
+let closeGallery=()=>{};
 function openPhoto(item) {
+  closeGallery();
   $('large-photo').src=item.photo;$('large-photo').alt=`${item.tip}, ${item.art}`;
-  $('photo-caption').textContent=item.art;$('photo-dialog').showModal();
+  $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0});$('photo-dialog').showModal();
 }
 function card(item) {
   const article=el('article','card');article.dataset.art=item.art;
@@ -180,7 +183,7 @@ function card(item) {
   if(validPhotoPath(item.photo)||item.photoSource==='approved') {
     const open=button('photo-button','',()=>openPhoto(item));open.setAttribute('aria-label',`Открыть фото ${item.art}`);
     const img=el('img');img.src=item.photo;img.alt=`${item.tip}, ${item.art}`;img.loading='lazy';img.decoding='async';img.width=480;img.height=480;
-    img.addEventListener('error',()=>{if(item.photoSource==='approved'&&validPhotoPath(item.photoFallback)&&img.dataset.fallback!=='1'){img.dataset.fallback='1';img.src=item.photoFallback;}else open.replaceWith(placeholder());});open.append(img);visual.append(open);
+    img.addEventListener('error',()=>{if((item.photoGallery?.length||0)>1)return;if(item.photoSource==='approved'&&validPhotoPath(item.photoFallback)&&img.dataset.fallback!=='1'){img.dataset.fallback='1';img.src=item.photoFallback;}else open.replaceWith(placeholder());});open.append(img);visual.append(open);mountPhotoGallery(visual,img,item,{onChange:index=>{item.galleryIndex=index;}});
   } else visual.append(placeholder());
   const body=el('div','card-body'),heading=el('div'),art=el('h2','article-code');
   if(item.art.startsWith('Без артикула · ')) {art.append(el('span','unknown-article','Без артикула'),document.createTextNode(item.art.slice('Без артикула · '.length)));}
@@ -271,7 +274,7 @@ async function load() {
     const promoResponse=await fetch('./promotions.json',{cache:'no-cache'});if(!promoResponse.ok)throw Error('Подборки недоступны');const promotions=await promoResponse.json();
     const campaignResponse=await fetch('./campaign-1111.json',{cache:'no-store'});if(!campaignResponse.ok)throw Error('Условия акции недоступны');campaignManifest=validateCampaign(await campaignResponse.json());lastCampaignDay=campaignDay();
     let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
-    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved'}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
+    generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
     domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
     $('search').value=state.q;updateFreshness();render();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;

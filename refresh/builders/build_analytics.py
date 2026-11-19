@@ -50,6 +50,8 @@ stock_units=[]
 for cells in source[1:]:
     row={field:text(cells[i]) if i<len(cells) else '' for field,i in columns.items()}
     if row['service'] or not any(row.values()):continue
+    if (config.get('ignore_empty_code_templates') and row.get('tip')
+            and not any(v for k,v in row.items() if k!='tip')):continue
     if row['code']=='ЮР-000' and not any(v for k,v in row.items() if k!='code'):continue
     art=canonical_article(row['art'],row['marka']) or 'Без артикула · '+row['code']
     p=stock_by_art.get(art)
