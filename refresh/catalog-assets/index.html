@@ -12,9 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=attrs-1109">
-  <script type="module" src="app.mjs?v=sets1120"></script>
+  <script type="module" src="app.mjs?v=brand1120"></script>
   <link rel="stylesheet" href="retail.css?v=sets1120">
   <link rel="stylesheet" href="sets.css?v=sets1120">
+  <link rel="stylesheet" href="brand.css?v=brand1120">
 </head>
 <body>
   <a class="skip-link" href="#results">Перейти к изделиям</a>
@@ -23,13 +24,13 @@
       <div class="brand-row">
         <a class="brand" href="./" aria-label="Каратник · Каталог, сбросить выборку">
           <span class="brand-mark" aria-hidden="true">К</span>
-          <span><span class="brand-title">Каратник <span class="brand-separator">·</span> Каталог</span><span class="brand-caption">инструмент для продавцов</span></span>
+          <span><span class="brand-title">Каратник</span><span class="brand-caption">Каталог украшений · для продавцов</span></span>
         </a>
-        <div class="freshness" id="freshness" role="status">Загружаем остатки…</div>
+        <a class="brand-site-link" href="https://karatnik-love.ru/" target="_blank" rel="noopener noreferrer">Сайт бренда</a>
       </div>
       <nav class="workspace-nav" aria-label="Разделы Каратника">
         <a class="workspace-tab" href="./" aria-current="page">Каталог</a>
-        <a class="workspace-tab" href="smart-search.html">По фото и описанию</a>
+        <a class="workspace-tab" href="smart-search.html" aria-label="Поиск по фото и описанию"><span class="desktop-tab-label">По фото и описанию</span><span class="mobile-tab-label">По фото</span></a>
         <a class="workspace-tab" id="staff-tab" href="#" hidden>Товаровед</a>
       </nav>
       <div class="search-row">
@@ -51,6 +52,7 @@
   <main class="page-shell">
     <aside class="sidebar" aria-label="Фильтры каталога">
       <div class="sidebar-heading"><h2>Фильтры</h2><button class="text-button reset-all" type="button" disabled>Сбросить</button></div>
+      <div id="desktop-tools"></div>
       <div id="desktop-filters"></div>
     </aside>
     <section class="results" id="results" aria-labelledby="results-title" tabindex="-1">
@@ -87,5 +89,6 @@
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
 </html>
+
 
 

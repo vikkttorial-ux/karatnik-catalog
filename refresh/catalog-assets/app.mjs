@@ -317,7 +317,7 @@ async function load() {
     $('search').value=state.q;updateFreshness();render();void refreshApprovedPhotos();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
     const withoutPhoto=items.filter(item=>!hasProductPhoto(item)).length;
-    $('footer').textContent=`Источник: Товар_Каратник · Исходники. Дата обновления указана вверху каталога. Без фото: ${number.format(withoutPhoto)} из ${number.format(items.length)}.`;
+    $('footer').textContent=`Источник: Товар_Каратник · Исходники. Дата обновления — в фильтрах каталога. Без фото: ${number.format(withoutPhoto)} из ${number.format(items.length)}.`;
   } catch(error) {
     $('error-panel').hidden=false;$('freshness').textContent='Остатки недоступны';$('freshness').classList.add('stale');
     $('error-message').textContent=location.protocol==='file:'?'Откройте каталог по локальной ссылке из инструкции.':'Не удалось загрузить данные. Проверьте подключение и повторите попытку.';
@@ -357,9 +357,27 @@ async function refreshApprovedPhotos(){
 window.addEventListener('focus',()=>{if(items.length)void refreshApprovedPhotos();});
 setInterval(()=>{if(items.length&&!document.hidden)void refreshApprovedPhotos();},60000);
 window.addEventListener('popstate',()=>{clearTimeout(inputTimer);state=parseState(location.search);$('search').value=state.q;if(items.length)render();});
+// Move the same live price controls between desktop and mobile; keep IDs,
+// event handlers, validation and URL state intact at every breakpoint.
+const filterTools=el('div','catalog-filter-tools');
+const freshnessHost=el('div','freshness','Загружаем остатки…');
+freshnessHost.id='freshness';freshnessHost.setAttribute('role','status');
+filterTools.append(freshnessHost,$('selection-summary'));
+const priceHost=el('div','price-filter-host');
+priceHost.append(document.querySelector('.retail-filters'));
+const priceTerms=el('details','price-terms');
+priceTerms.append(el('summary','','Условия расчёта цены'),document.querySelector('.retail-banner'));
+priceHost.append(priceTerms);filterTools.append(priceHost);
+for(const id of ['earring-filters','ring-kind-filter','wedding-filters','weave-filter'])filterTools.append($(id));
+const mobileScroll=el('div','mobile-filter-scroll'),mobileTools=el('div','mobile-tools');
+$('mobile-filters').before(mobileScroll);mobileScroll.append(mobileTools,$('mobile-filters'));
+const mobileLayout=matchMedia('(max-width:760px)');
+function placeFilterTools(){(mobileLayout.matches?mobileTools:$('desktop-tools')).append(filterTools);}
+mobileLayout.addEventListener('change',placeFilterTools);placeFilterTools();
 new ResizeObserver(()=>document.documentElement.style.setProperty('--header-height',`${$('site-header').getBoundingClientRect().height}px`)).observe($('site-header'));
 if('IntersectionObserver' in window) new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)&&shown<filtered.length) appendCards();},{rootMargin:'350px'}).observe($('load-more-wrap'));
 setInterval(()=>{updateFreshness();if(items.length&&campaignManifest&&campaignDay()!==lastCampaignDay){lastCampaignDay=campaignDay();items=prepareItems(items.map(item=>withCampaign(item,campaignManifest)));items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();}},60000);
 load();
+
 
 
