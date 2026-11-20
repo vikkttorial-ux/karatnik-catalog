@@ -1,11 +1,11 @@
-import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=retail1120';
-import {mountPhotoGallery} from './photo-gallery.mjs?v=retail1120';
+import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=retail1120b';
+import {mountPhotoGallery} from './photo-gallery.mjs?v=retail1120b';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=retail1120';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=retail1120b';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=retail1120';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=retail1120b';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=retail1120';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=retail1120b';
 const $=id=>document.getElementById(id);
 fetch('staff-config.json',{cache:'no-store'})
   .then(response=>response.ok?response.json():null)

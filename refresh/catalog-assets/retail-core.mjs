@@ -1,5 +1,12 @@
 export const GOLD_EVENT={starts:'2026-11-20',ends:'2026-11-22',percent:40};
-export function retailDay(now=new Date()){return typeof now==='string'?now:new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).format(now);}
+const dayFormatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'});
+let cachedMinute=NaN,cachedDay='';
+export function retailDay(now=new Date()){
+ if(typeof now==='string')return now;
+ const minute=Math.floor(now.getTime()/60000);
+ if(minute!==cachedMinute){cachedDay=dayFormatter.format(now);cachedMinute=minute;}
+ return cachedDay;
+}
 export function retailPercent(item,now=new Date()){
  const assay=String(item.proba||'').trim(),day=retailDay(now);
  if(['800','830','875','925','960'].includes(assay))return 20;
@@ -26,4 +33,5 @@ export function retailOffer(item,state={},now=new Date()){
 }
 export function matchesRetail(item,state,now=new Date()){return rubBound(state.rubMin)===null&&rubBound(state.rubMax)===null||retailOffer(item,state,now).amount!==null;}
 export function retailBanner(now=new Date()){const day=retailDay(now);return day>=GOLD_EVENT.starts&&day<=GOLD_EVENT.ends?'20–22 ноября · всё золото −40% · серебро −20%':'Золото и серебро −20%';}
-export const rubles=value=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:2}).format(value);
+const rubFormatter=new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:2});
+export const rubles=value=>rubFormatter.format(value);
