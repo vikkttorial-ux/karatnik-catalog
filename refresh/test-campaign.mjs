@@ -69,3 +69,5 @@ await import('./test-retail.mjs');
  }finally{globalThis.fetch=originalFetch;}
  console.log('Client selection filters, approved gallery snapshot and offline photo handling passed');
 }
+
+await import('./test-sets.mjs');

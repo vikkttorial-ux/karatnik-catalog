@@ -1,12 +1,13 @@
-import {clientSelectionUrl} from './share-core.mjs?v=guide1120';
-import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=guide1120';
-import {mountPhotoGallery} from './photo-gallery.mjs?v=guide1120';
+import {validateSets,attachSets,relatedSets,setLink,setKey} from './set-core.mjs?v=sets1120';
+import {clientSelectionUrl} from './share-core.mjs?v=sets1120';
+import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=sets1120';
+import {mountPhotoGallery} from './photo-gallery.mjs?v=sets1120';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=guide1120';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=sets1120';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=guide1120';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=sets1120';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=guide1120';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=sets1120';
 const $=id=>document.getElementById(id);
 const clientView=new URLSearchParams(location.search).get('client')==='1';
 document.documentElement.classList.toggle('client-view',clientView);
@@ -27,6 +28,7 @@ const labels={inspired_by:'Под бренд',pendant_kind:'Вид подвес�
 const swatches={'КР':'#ca9982','Б':'#d5d8dd','Ж':'#d2b35e','2ЦВ':'linear-gradient(90deg,#d5d8dd 50%,#ca9982 50%)','Ч':'#4d4e52','СЗ':'linear-gradient(90deg,#d5d8dd 50%,#d2b35e 50%)'};
 const photoIcon='<svg aria-hidden="true" viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="26" rx="3"/><circle cx="15" cy="16" r="3"/><path d="m6 29 10-9 7 6 5-5 7 7"/></svg>';
 let state=parseState(location.search),items=[],filtered=[],domains={},shown=0,generatedAt='',loading=false,approvedPhotos=new Map();
+let setsManifest={version:1,sets:[]};
 let inputTimer,toastTimer;
 let campaignManifest=null,lastCampaignDay='';
 
@@ -35,6 +37,8 @@ function button(className,text,handler) {const node=el('button',className,text);
 function positionWord(n) {const x=n%100,y=n%10;return x>=11&&x<=14?'позиций':y===1?'позиция':y>=2&&y<=4?'позиции':'позиций';}
 function filterLabel(key) {if(key==='char2'&&state.tip==='Серьги')return 'Вид серёг (характеристика 2)';return key==='thickness'&&state.tip==='Кольцо'?'Ширина шинки':labels[key];}
 function labelFor(key,value) {
+  if(key==='set')return 'Комплект '+value;
+  if(key==='model')return 'Модель: '+value.split('|')[0];
   if(key==='selection'&&value==='Вернулись в наличие')return 'Снова в наличии';
   if(key==='rubMin'||key==='rubMax')return (key==='rubMin'?'От ':'До ')+rubles(rubBound(value));
   if(key==='cvet') return COLORS[value]||value;
@@ -49,7 +53,7 @@ function changeFilter(key,value) {
   clearTimeout(inputTimer);
   state.q=$('search').value.trim();
   state[key]=state[key]===value?'':value;
-  if(key==='tip') state.size='';
+  if(key==='tip'){state.size='';state.model='';}
   updateUrl();render();
 }
 function resetAll() {
@@ -85,7 +89,7 @@ function renderTypes(counts) {
   const fragment=document.createDocumentFragment();
   const withoutType={...state,tip:'',size:''};
   const total=filterItems(items,withoutType).length;
-  const all=button('type-chip','',()=>{state.tip='';state.size='';updateUrl();render();});
+  const all=button('type-chip','',()=>{state.tip='';state.size='';state.model='';state.set='';updateUrl();render();});
   all.setAttribute('aria-pressed',String(!state.tip));all.append(el('span','','Все изделия'),el('span','chip-count',number.format(total)));fragment.append(all);
   for(const value of domains.tip) fragment.append(createChip('tip',value,counts.get(value)||0,'type-chip'));
   $('types').replaceChildren(fragment);
@@ -158,13 +162,13 @@ function render() {
   $('header-count').textContent=`${number.format(filtered.length)} ${positionWord(filtered.length)}`;
   $('results-announcement').textContent=`Найдено: ${number.format(filtered.length)} ${positionWord(filtered.length)}`;
   $('apply-filters').textContent=`Показать ${number.format(filtered.length)}`;
-  const selected=[...FILTER_KEYS,'rubMin','rubMax'].filter(key=>state[key]);
+  const selected=[...FILTER_KEYS,'rubMin','rubMax','set','model'].filter(key=>state[key]);
   $('filter-count').hidden=selected.length===0;$('filter-count').textContent=selected.length;
   $('open-filters').setAttribute('aria-label',selected.length?`Фильтры, выбрано ${selected.length}`:'Фильтры');
   $('clear-search').hidden=!state.q;
   document.querySelectorAll('.reset-all').forEach(node=>node.disabled=!state.q&&!selected.length);
   const summary=document.createDocumentFragment();
-  for(const key of ['q','rubMin','rubMax',...FILTER_KEYS]) if(state[key]) {
+  for(const key of ['q','rubMin','rubMax','set','model',...FILTER_KEYS]) if(state[key]) {
     const value=key==='q'?`Поиск: ${state.q}`:['char2','char3','thickness'].includes(key)?`${filterLabel(key)}: ${state[key]}`:labelFor(key,state[key]);
     const chip=button('selection-pill','',()=>{state[key]='';if(key==='q')$('search').value='';if(key==='tip')state.size='';updateUrl();render();});
     chip.setAttribute('aria-label','Снять: '+value);chip.append(el('span','',value),el('span','','×'));summary.append(chip);
@@ -182,10 +186,28 @@ function placeholder() {
   const node=el('div','photo-placeholder');node.innerHTML=photoIcon;node.append(el('span','','Нет фото'));return node;
 }
 let closeGallery=()=>{};
+function appendSetLinks(host,item){
+ const groups=relatedSets(item,setsManifest,items);
+ for(const group of groups){
+  const block=el('section','set-block');block.setAttribute('aria-label','В комплекте');block.append(el('h3','','В комплекте'));
+  for(const peer of group.members){
+   const link=el(peer.units?'a':'div','set-peer');
+   if(peer.units){link.href=setLink(location.href,{member:peer,client:clientView});link.setAttribute('aria-label','Открыть '+peer.art+' из комплекта');}
+   const approved=approvedPhotos.get(photoPair(peer.art,peer.marka)),photo=approved?.url||peer.photo;
+   if(approved||validPhotoPath(photo)){const img=el('img');img.src=photo;img.alt=[peer.tip,peer.art].filter(Boolean).join(' ');img.width=72;img.height=72;img.loading='lazy';link.append(img);}
+   const text=el('div','set-peer-text');text.append(el('strong','',[peer.tip,peer.art].filter(Boolean).join(' ')));
+   text.append(el('small','',peer.units?'В наличии · '+Object.keys(peer.stocks).join(', '):'Нет в наличии'));
+   if(peer.units){const offer=retailOffer(peer,{});text.append(el('span','set-peer-amount',offer.amount!==null?`Цена от ${rubles(offer.amount)}`:'Цена от — уточняется'));text.append(el('span','set-peer-open','Открыть изделие'));}
+   link.append(text);block.append(link);
+  }
+  const all=el('a','set-all','Посмотреть комплект');all.href=setLink(location.href,{id:group.id,client:clientView});block.append(all);host.append(block);
+ }
+ return groups.length>0;
+}
 function openPhoto(item) {
   closeGallery();
   $('large-photo').src=item.photo;$('large-photo').alt=`${item.tip}, ${item.art}`;
-  $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0});$('photo-dialog').showModal();
+  $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0});$('photo-sets').replaceChildren();$('photo-dialog').classList.toggle('with-sets',appendSetLinks($('photo-sets'),item));$('photo-dialog').showModal();
 }
 function card(item) {
   const article=el('article','card');article.dataset.art=item.art;
@@ -218,6 +240,7 @@ function card(item) {
   if(item.promotions?.replenished_sizes?.length)body.append(el('p','insertion','Пополнили размеры: '+item.promotions.replenished_sizes.join(', ')));
   if(!item.units)body.append(el('p','insertion','Ещё не в наличии'));
   if(item.marka) body.append(el('p','insertion',item.marka));
+  appendSetLinks(body,item);
   if(item.naim) {
     const details=el('details','item-description');details.append(el('summary','','Полное наименование'),el('p','',item.naim));body.append(details);
   }
@@ -285,11 +308,12 @@ async function load() {
     const response=await fetch('./data.json',{cache:'no-cache'});
     if(!response.ok) throw new Error('Не удалось прочитать данные');
     const data=validateData(await response.json());
+    const setResponse=await fetch('./sets.json',{cache:'no-cache'});if(!setResponse.ok)throw Error('Комплекты недоступны');setsManifest=validateSets(await setResponse.json());
     const promoResponse=await fetch('./promotions.json',{cache:'no-cache'});if(!promoResponse.ok)throw Error('Подборки недоступны');const promotions=await promoResponse.json();
     const campaignResponse=await fetch('./campaign-1111.json',{cache:'no-store'});if(!campaignResponse.ok)throw Error('Условия акции недоступны');campaignManifest=validateCampaign(await campaignResponse.json());lastCampaignDay=campaignDay();
     let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
     generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
-    domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
+    items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
     $('search').value=state.q;updateFreshness();render();void refreshApprovedPhotos();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
     const withoutPhoto=items.filter(item=>!hasProductPhoto(item)).length;
@@ -302,8 +326,8 @@ async function load() {
 for(const key of ['rubMin','rubMax'])$(key).addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(()=>{state.rubMin=$('rubMin').value;state.rubMax=$('rubMax').value;updateUrl('replace');render();},250);});
 for(const [id,key] of [['earring-kind-select','char2'],['earring-detail-select','char3'],['earring-lock-select','lock'],['ring-kind-select','char2'],['ring-style-select','char3'],['ring-width-select','thickness']]) $(id).addEventListener('change',event=>{state[key]=event.target.value;updateUrl();render();});
 $('weave-select').addEventListener('change',event=>{state.char2=event.target.value;updateUrl();render();});
-$('search').addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(()=>{state.q=$('search').value.trim();updateUrl('replace');render();},100);});
-$('search').addEventListener('keydown',event=>{if(event.key==='Enter'){clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');render();$('search').blur();}});
+$('search').addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(()=>{state.q=$('search').value.trim();state.model='';state.set='';updateUrl('replace');render();},100);});
+$('search').addEventListener('keydown',event=>{if(event.key==='Enter'){clearTimeout(inputTimer);state.q=$('search').value.trim();state.model='';state.set='';updateUrl('replace');render();$('search').blur();}});
 $('clear-search').addEventListener('click',()=>{clearTimeout(inputTimer);state.q='';$('search').value='';updateUrl();render();$('search').focus();});
 document.querySelectorAll('.reset-all').forEach(node=>node.addEventListener('click',resetAll));
 $('load-more').addEventListener('click',appendCards);$('retry').addEventListener('click',load);
@@ -327,7 +351,7 @@ async function refreshApprovedPhotos(){
  try{const fresh=await loadApprovedPhotos({live:true});if(!fresh.size)return;
   const signature=map=>JSON.stringify([...map.values()].map(p=>[p.key,p.url,p.photos]));if(signature(fresh)===signature(approvedPhotos))return;
   approvedPhotos=fresh;items=prepareItems(items.map(p=>{const approved=fresh.get(photoPair(p.art,p.marka));return approved?{...p,photo:approved.url,photoFallback:p.photoFallback||p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:p;}));
-  domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();
+  items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();
  }finally{photoRefreshBusy=false;}
 }
 window.addEventListener('focus',()=>{if(items.length)void refreshApprovedPhotos();});
@@ -335,7 +359,7 @@ setInterval(()=>{if(items.length&&!document.hidden)void refreshApprovedPhotos();
 window.addEventListener('popstate',()=>{clearTimeout(inputTimer);state=parseState(location.search);$('search').value=state.q;if(items.length)render();});
 new ResizeObserver(()=>document.documentElement.style.setProperty('--header-height',`${$('site-header').getBoundingClientRect().height}px`)).observe($('site-header'));
 if('IntersectionObserver' in window) new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)&&shown<filtered.length) appendCards();},{rootMargin:'350px'}).observe($('load-more-wrap'));
-setInterval(()=>{updateFreshness();if(items.length&&campaignManifest&&campaignDay()!==lastCampaignDay){lastCampaignDay=campaignDay();items=prepareItems(items.map(item=>withCampaign(item,campaignManifest)));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();}},60000);
+setInterval(()=>{updateFreshness();if(items.length&&campaignManifest&&campaignDay()!==lastCampaignDay){lastCampaignDay=campaignDay();items=prepareItems(items.map(item=>withCampaign(item,campaignManifest)));items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();}},60000);
 load();
 
 

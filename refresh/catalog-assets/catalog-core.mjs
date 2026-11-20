@@ -1,4 +1,5 @@
 import {matchesRetail} from './retail-core.mjs?v=retail1120b';
+import {setKey} from './set-core.mjs?v=sets1120';
 // Чистые функции поиска и фильтров: используются страницей и проверками.
 export const FILTER_KEYS = ['selection','tip','size','char2','char3','thickness','lock','marka','proba','cvet','polnpust','kamni','stock','photo','inspired_by','pendant_kind','religion','motif','saint'];
 export const PHOTO_FILTER_VALUES = ['Без фото','С фото'];
@@ -27,16 +28,16 @@ export function prepareItems(items) {
     _codeNumbers:(item.codes||[]).map(codeNumber).filter(Boolean)
   }));
 }
-export function blankState() {return {q:'',rubMin:'',rubMax:'',client:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
+export function blankState() {return {q:'',rubMin:'',rubMax:'',client:'',set:'',model:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
 export function parseState(search) {
   const params = new URLSearchParams(search), state=blankState();
-  for(const key of ['q','rubMin','rubMax','client',...FILTER_KEYS]) state[key]=params.get(key) || '';
+  for(const key of ['q','rubMin','rubMax','client','set','model',...FILTER_KEYS]) state[key]=params.get(key) || '';
   if(!supportsSize(state.tip)) state.size='';
   return state;
 }
 export function serializeState(state) {
   const params=new URLSearchParams();
-  for(const key of ['q','rubMin','rubMax','client',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
+  for(const key of ['q','rubMin','rubMax','client','set','model',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
   return params.toString();
 }
 export function valuesFor(item,key) {
@@ -51,6 +52,8 @@ export function valuesFor(item,key) {
   return [item[key] || EMPTY];
 }
 export function matches(item,state,except='') {
+  if(state.set&&!item.setIds?.includes(state.set))return false;
+  if(state.model&&setKey(item)!==state.model)return false;
   const query=normalize(state.q);
   const number=codeNumber(query);
   const codeMatch=number ? item._codeNumbers?.includes(number) : item._codes?.some(code=>code.includes(compact(query)));

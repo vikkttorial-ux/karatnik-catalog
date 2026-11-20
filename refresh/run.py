@@ -75,12 +75,13 @@ def build(fixtures=None):
  if (cache/'history').exists():
   for p in (cache/'history').glob('*.json'):write(WORK/('backup-refresh-'+p.stem)/'stock.json',read(p))
  if fixtures:
-  f=Path(fixtures);master=read(f/'master.json');supp=read(f/'supplement.json');sales=read(f/'sales.json');stamp=master['read_at']
+  f=Path(fixtures);master=read(f/'master.json');supp=read(f/'supplement.json');sales=read(f/'sales.json');stamp=master['read_at'];set_rows=read(f/'sets.json')
  else:
   reader=Reader();config=read(CAT/'config.json');allowed=set(config['headers'].values())|{'Группа вставки','Дата прихода','Дата продажи','Остаток гр','Ожидаемая дата поступления','Ожидаемая дата','Метка'}
   mr=reader.rows(MASTER,'Исходники',allowed=allowed,required=config['headers'].values())
   allowed={'Артикул','Бренд','Наименование изделия','Полн/Пуст','Характеристика 2','Характеристика 3','Толщина','Проба','Цвет','Вставки полностью','Вставки','Тип замка','Основной камень (вставки)','Цвет камня','Тип огранки','Дата прихода','Размер','Группа вставки','Название на сайте','Метка','Ожидается (дата)'}
   sr=reader.rows(SUPPLEMENT,'Артикулы',2,allowed,{'Артикул','Бренд','Характеристика 2','Тип замка'});sources=[]
+  set_rows=reader.rows(SUPPLEMENT,'Комплекты',allowed={'Комплект','Бренд','Артикул','Подтверждено','Комментарий'},required={'Комплект','Бренд','Артикул','Подтверждено','Комментарий'})
   for file,stock in [('1pyv0zCDJFdHC36pxK99neo6uNUw8rl8Hu5d6d0DY4II','Ленинградская 33'),('1sGLiSfctiOHUN_ncirhwVTWl8LyMSE1R1djZWsMkYtg','Гостинка (В.Е.Левин)')]:
    rows=reader.rows(file,'Продажи',value_render_option='UNFORMATTED_VALUE')
    if not valid_sales_header(rows[0]):raise RuntimeError('Изменились колонки продаж.')
@@ -105,6 +106,8 @@ def build(fixtures=None):
  if any(prior.get((p['art'],p['marka']),{}).get('photo') and not p.get('photo') for p in stock['items']):raise RuntimeError('Утрачена известная фотография.')
  if read(OWNER/'analytics.json')['stock']!=stock:raise RuntimeError('Аналитика и остатки расходятся.')
  sys.path.insert(0,str(CAT));from catalog import validate_catalog,scan_site
+ from build_sets import build_sets
+ write(CAT/'site/sets.json',build_sets(set_rows,master['values'],stock))
  validate_catalog(stock,len(live));scan_site(CAT/'site')
  if any(not read(OWNER/name) for name in FILES):raise RuntimeError('Пустой результат.')
  shutil.copytree(CAT/'site',REPO/'site',dirs_exist_ok=True);shutil.copy2(REPO/'refresh/catalog-refresh.js',REPO/'site/catalog-refresh.js')

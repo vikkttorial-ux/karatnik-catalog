@@ -12,8 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=attrs-1109">
-  <script type="module" src="app.mjs?v=guide1120"></script>
-  <link rel="stylesheet" href="retail.css?v=guide1120">
+  <script type="module" src="app.mjs?v=sets1120"></script>
+  <link rel="stylesheet" href="retail.css?v=sets1120">
+  <link rel="stylesheet" href="sets.css?v=sets1120">
 </head>
 <body>
   <a class="skip-link" href="#results">Перейти к изделиям</a>
@@ -81,7 +82,7 @@
     <div class="mobile-filters" id="mobile-filters"></div>
     <div class="dialog-actions"><button class="text-button reset-all" type="button">Сбросить все</button><button id="apply-filters" type="button" class="primary-button">Показать изделия</button></div>
   </dialog>
-  <dialog class="photo-dialog" id="photo-dialog" aria-label="Фотография изделия"><button class="icon-button" id="close-photo" type="button" aria-label="Закрыть фотографию">×</button><img id="large-photo" alt=""><p id="photo-caption"></p></dialog>
+  <dialog class="photo-dialog" id="photo-dialog" aria-label="Фотография изделия"><button class="icon-button" id="close-photo" type="button" aria-label="Закрыть фотографию">×</button><div id="large-photo-wrap"><img id="large-photo" alt=""></div><p id="photo-caption"></p><div id="photo-sets"></div></dialog>
   <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title"><h2 id="share-title">Ссылка на подборку для клиента</h2><p>Клиент увидит выбранные фильтры и актуальные доступные украшения.</p><label for="share-url">Ссылка</label><input id="share-url" readonly><p id="share-copy-result" role="status"></p><button id="copy-share" type="button" class="primary-button">Скопировать ссылку</button><button id="close-share" type="button" class="secondary-button">Закрыть</button></dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
