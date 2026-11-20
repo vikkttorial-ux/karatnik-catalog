@@ -357,17 +357,17 @@ async function refreshApprovedPhotos(){
 window.addEventListener('focus',()=>{if(items.length)void refreshApprovedPhotos();});
 setInterval(()=>{if(items.length&&!document.hidden)void refreshApprovedPhotos();},60000);
 window.addEventListener('popstate',()=>{clearTimeout(inputTimer);state=parseState(location.search);$('search').value=state.q;if(items.length)render();});
-// Move the same live price controls between desktop and mobile; keep IDs,
+// Move the same live retail controls between desktop and mobile; keep IDs,
 // event handlers, validation and URL state intact at every breakpoint.
 const filterTools=el('div','catalog-filter-tools');
 const freshnessHost=el('div','freshness','Загружаем остатки…');
 freshnessHost.id='freshness';freshnessHost.setAttribute('role','status');
 filterTools.append(freshnessHost,$('selection-summary'));
-const priceHost=el('div','price-filter-host');
-priceHost.append(document.querySelector('.retail-filters'));
-const priceTerms=el('details','price-terms');
-priceTerms.append(el('summary','','Условия расчёта цены'),document.querySelector('.retail-banner'));
-priceHost.append(priceTerms);filterTools.append(priceHost);
+const rangeHost=el('div','retail-range-host');
+rangeHost.append(document.querySelector('.retail-filters'));
+const retailTerms=el('details','retail-terms');
+retailTerms.append(el('summary','','Условия расчёта скидки'),document.querySelector('.retail-banner'));
+rangeHost.append(retailTerms);filterTools.append(rangeHost);
 for(const id of ['earring-filters','ring-kind-filter','wedding-filters','weave-filter'])filterTools.append($(id));
 const mobileScroll=el('div','mobile-filter-scroll'),mobileTools=el('div','mobile-tools');
 $('mobile-filters').before(mobileScroll);mobileScroll.append(mobileTools,$('mobile-filters'));
