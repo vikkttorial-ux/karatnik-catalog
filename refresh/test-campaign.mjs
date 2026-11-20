@@ -47,3 +47,5 @@ console.log('Default new-first ordering, active-filter order and confirmed artic
  const chain=prepareItems([{...bracelet,art:'ЦНН20517035',marka:'Каратов'}]);
  assert.equal(filterItems(chain,{...blankState(),q:'ЦНН20517035-РА'}).length,1);
 }
+
+await import('./test-retail.mjs');

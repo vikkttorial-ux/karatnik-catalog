@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {retailPercent,discountedRubles,retailOffer,matchesRetail} from './catalog-assets/retail-core.mjs';
+import {blankState,parseState,serializeState} from './catalog-assets/catalog-core.mjs';
+const g={proba:'585',stock_codes:{A:[{size:'17',prc:10000},{size:'18',prc:20000}],B:[{size:'17',prc:5000},{size:'18'}]}};
+for(const[d,p]of[['2026-11-19T20:59:59Z',20],['2026-11-19T21:00:00Z',40],['2026-11-22T20:59:59Z',40],['2026-11-22T21:00:00Z',20]])assert.equal(retailPercent(g,new Date(d)),p);
+assert.equal(discountedRubles({prc:12345.67},{proba:'925'},'2026-11-20'),9876.54);
+assert.equal(retailOffer(g,{},'2026-11-20').amount,3000);
+assert.equal(retailOffer(g,{stock:'A',size:'17'},'2026-11-20').amount,6000);
+assert.equal(retailOffer(g,{rubMin:'10000',rubMax:'13000'},'2026-11-20').amount,12000);
+assert.equal(retailOffer(g,{stock:'B',size:'18'},'2026-11-20').amount,null);
+for(const prc of[undefined,null,0,-1,Infinity,'100'])assert.equal(discountedRubles({prc},g,'2026-11-20'),null);
+assert.equal(matchesRetail(g,{rubMin:'9000',rubMax:'8000'},'2026-11-20'),false);
+const s={...blankState(),rubMin:'100',rubMax:'800',tip:'Кольцо',size:'17',stock:'A'};
+assert.deepEqual(parseState('?'+serializeState(s)),s);
+console.log('Retail discounts, Moscow dates, unit-specific ranges and shared filters passed');

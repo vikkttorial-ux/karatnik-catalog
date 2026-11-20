@@ -12,7 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=attrs-1109">
-  <script type="module" src="app.mjs?v=gallery-1119"></script>
+  <script type="module" src="app.mjs?v=retail1120"></script>
+  <link rel="stylesheet" href="retail.css?v=retail1120">
 </head>
 <body>
   <a class="skip-link" href="#results">Перейти к изделиям</a>
@@ -59,6 +60,8 @@
           <span>Ссылка на выборку</span>
         </button>
       </div>
+      <div class="retail-banner" role="status"><span id="retail-banner-title"></span><small>От ПРЦ, без суммирования скидок. «От» — по доступному изделию с учётом выбранных магазина и размера.</small></div>
+      <fieldset class="retail-filters"><legend>Стоимость со скидкой, ₽</legend><label for="rubMin">От<input id="rubMin" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Любая"></label><label for="rubMax">До<input id="rubMax" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Любая"></label><small id="rub-error" role="status" hidden>Сумма «От» должна быть не больше «До».</small></fieldset>
       <div id="earring-filters" hidden><div class="weave-filter"><label for="earring-kind-select">Вид серёг (характеристика 2)</label><select id="earring-kind-select"></select></div><div class="weave-filter"><label for="earring-detail-select">Характеристика 3</label><select id="earring-detail-select"></select></div><div class="weave-filter"><label for="earring-lock-select">Тип замка</label><select id="earring-lock-select"></select></div><p id="earring-lock-note" class="no-sizes" hidden>Типы замков пока не заполнены в исходной таблице.</p></div>
       <div id="ring-kind-filter" class="weave-filter" hidden><label for="ring-kind-select">Вид кольца</label><select id="ring-kind-select"></select></div>
       <div id="wedding-filters" class="wedding-filters" hidden><div class="weave-filter"><label for="ring-style-select">Характеристика 3</label><select id="ring-style-select"></select></div><div class="weave-filter"><label for="ring-width-select">Ширина шинки</label><select id="ring-width-select"></select></div></div>
@@ -82,4 +85,5 @@
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
 </html>
+
 
