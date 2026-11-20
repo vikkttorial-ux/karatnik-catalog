@@ -49,3 +49,23 @@ console.log('Default new-first ordering, active-filter order and confirmed artic
 }
 
 await import('./test-retail.mjs');
+
+{
+ const {clientSelectionUrl}=await import('./catalog-assets/share-core.mjs');
+ const {parseState,blankState}=await import('./catalog-assets/catalog-core.mjs');
+ const {approvedPhotoMap,photoPair,loadApprovedPhotos}=await import('./catalog-assets/photo-client.mjs');
+ const state={...blankState(),tip:'Кольцо',size:'17',q:'ЗК2030',rubMin:'10000',rubMax:'30000',stock:'Ленинградская 33'};
+ const url=clientSelectionUrl(state,'https://vikkttorial-ux.github.io/karatnik-catalog/');
+ assert.deepEqual(parseState(new URL(url).search),{...state,client:'1'});
+ const approved=JSON.parse(fs.readFileSync(new URL('./catalog-assets/approved-photos.json',import.meta.url),'utf8'));
+ assert.equal(approvedPhotoMap(approved).get(photoPair('ЗК2030/ВБр','Каратник')).photos.length,4);
+ assert.equal(approvedPhotoMap({items:[{art:'X',brand:'Y',url:'https://invalid.example/image'}]}).size,0);
+ const originalFetch=globalThis.fetch;
+ try{
+  globalThis.fetch=async()=>({ok:true,json:async()=>approved});
+  assert.equal((await loadApprovedPhotos()).get(photoPair('ЗК2030/ВБр','Каратник')).photos.length,4);
+  globalThis.fetch=async()=>{throw new Error('offline')};
+  assert.equal((await loadApprovedPhotos({live:true})).size,0);
+ }finally{globalThis.fetch=originalFetch;}
+ console.log('Client selection filters, approved gallery snapshot and offline photo handling passed');
+}

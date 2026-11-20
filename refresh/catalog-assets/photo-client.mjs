@@ -15,22 +15,20 @@ export async function photoUploadUrl(art, brand) {
   return `${PHOTO_PORTAL}/?product=${encodeURIComponent(hex)}`;
 }
 
-export async function loadApprovedPhotos() {
-  try {
-    const response = await fetch(MANIFEST_URL, { cache: 'no-store', mode: 'cors', signal: AbortSignal.timeout(4000) });
-    if (!response.ok) return new Map();
-    const manifest = await response.json();
-    const photos = new Map();
-    for (const item of manifest.items || []) {
-      if (!item || typeof item.art !== 'string' || typeof item.brand !== 'string' || typeof item.url !== 'string') continue;
-      if (!galleryPhotoUrl(item.url)) continue;
-      const gallery=Array.isArray(item.photos)?item.photos.filter(p=>p&&galleryPhotoUrl(p.url)):[];
-      photos.set(photoPair(item.art, item.brand), {...item,photos:gallery});
-    }
-    return photos;
-  } catch {
-    return new Map();
-  }
+export function approvedPhotoMap(manifest) {
+ const photos=new Map();
+ for(const item of manifest?.items||[]){
+  if(!item||typeof item.art!=='string'||typeof item.brand!=='string'||!galleryPhotoUrl(item.url))continue;
+  const gallery=Array.isArray(item.photos)?item.photos.filter(p=>p&&galleryPhotoUrl(p.url)):[];
+  photos.set(photoPair(item.art,item.brand),{...item,photos:gallery});
+ }
+ return photos;
+}
+export async function loadApprovedPhotos({live=false}={}) {
+ try {
+  const response=await fetch(live?MANIFEST_URL:new URL('./approved-photos.json',import.meta.url),{cache:'no-store',...(live?{mode:'cors'}:{}),signal:AbortSignal.timeout(live?15000:3000)});
+  return response.ok?approvedPhotoMap(await response.json()):new Map();
+ } catch {return new Map();}
 }
 
 export function appendPhotoUploadLink(container, art, brand) {

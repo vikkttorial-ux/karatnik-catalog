@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=attrs-1109">
-  <script type="module" src="app.mjs?v=retail1120b"></script>
-  <link rel="stylesheet" href="retail.css?v=retail1120b">
+  <script type="module" src="app.mjs?v=guide1120"></script>
+  <link rel="stylesheet" href="retail.css?v=guide1120">
 </head>
 <body>
   <a class="skip-link" href="#results">Перейти к изделиям</a>
@@ -55,9 +55,9 @@
     <section class="results" id="results" aria-labelledby="results-title" tabindex="-1">
       <div class="results-heading">
         <div><p class="eyebrow">НАЛИЧИЕ В МАГАЗИНАХ</p><h1 id="results-title">Все изделия <span id="result-count"></span></h1></div>
-        <button id="share-selection" class="share-button" type="button" disabled title="Скопировать ссылку на выборку">
+        <button id="share-selection" class="share-button" type="button" disabled title="Отправить клиенту ссылку на выбранные украшения">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m10 13 4-4M8.5 15l-1 1a3.5 3.5 0 0 1-5-5l4-4a3.5 3.5 0 0 1 5 0M15.5 9l1-1a3.5 3.5 0 0 1 5 5l-4 4a3.5 3.5 0 0 1-5 0"/></svg>
-          <span>Ссылка на выборку</span>
+          <span>Поделиться подборкой</span>
         </button>
       </div>
       <div class="retail-banner" role="status"><span id="retail-banner-title"></span><small>От ПРЦ, без суммирования скидок. «От» — по доступному изделию с учётом выбранных магазина и размера.</small></div>
@@ -82,6 +82,7 @@
     <div class="dialog-actions"><button class="text-button reset-all" type="button">Сбросить все</button><button id="apply-filters" type="button" class="primary-button">Показать изделия</button></div>
   </dialog>
   <dialog class="photo-dialog" id="photo-dialog" aria-label="Фотография изделия"><button class="icon-button" id="close-photo" type="button" aria-label="Закрыть фотографию">×</button><img id="large-photo" alt=""><p id="photo-caption"></p></dialog>
+  <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title"><h2 id="share-title">Ссылка на подборку для клиента</h2><p>Клиент увидит выбранные фильтры и актуальные доступные украшения.</p><label for="share-url">Ссылка</label><input id="share-url" readonly><p id="share-copy-result" role="status"></p><button id="copy-share" type="button" class="primary-button">Скопировать ссылку</button><button id="close-share" type="button" class="secondary-button">Закрыть</button></dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
 </html>

@@ -1,12 +1,16 @@
-import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=retail1120b';
-import {mountPhotoGallery} from './photo-gallery.mjs?v=retail1120b';
+import {clientSelectionUrl} from './share-core.mjs?v=guide1120';
+import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=guide1120';
+import {mountPhotoGallery} from './photo-gallery.mjs?v=guide1120';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=retail1120b';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=guide1120';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=retail1120b';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=guide1120';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=retail1120b';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=guide1120';
 const $=id=>document.getElementById(id);
+const clientView=new URLSearchParams(location.search).get('client')==='1';
+document.documentElement.classList.toggle('client-view',clientView);
+if(clientView){document.querySelector('.brand-caption').textContent='подборка украшений';document.querySelector('.brand').href='?client=1';}
 fetch('staff-config.json',{cache:'no-store'})
   .then(response=>response.ok?response.json():null)
   .then(config=>{
@@ -48,7 +52,7 @@ function changeFilter(key,value) {
   updateUrl();render();
 }
 function resetAll() {
-  clearTimeout(inputTimer);state=blankState();$('search').value='';updateUrl();render();
+  clearTimeout(inputTimer);state=blankState();state.client=clientView?'1':'';$('search').value='';updateUrl();render();
 }
 function sortedDomain(key) {
   if(key==='selection')return [...(items.some(item=>item.campaign)?['11.11']:[]),...SELECTIONS];
@@ -199,9 +203,9 @@ function card(item) {
     item.cvet?{label:labelFor('cvet',item.cvet)}:null,item.polnpust?{label:item.polnpust}:null,item.kamni?{label:item.kamni==='Не определено'?'Камни не определены':item.kamni}:null];
   for(const tag of tagValues.filter(Boolean)) tags.append(el('span','tag '+(tag.style||''),tag.label));
   const offer=retailOffer(item,state),amount=el('div','retail-offer');
-  if(offer.amount!==null){amount.append(el('strong','',`От ${rubles(offer.amount)}`));amount.append(el('del','',rubles(offer.prc)),el('span','retail-discount',`−${offer.percent}% от ПРЦ`));if(offer.known<offer.total)amount.append(el('small','',`ПРЦ указана для ${offer.known} из ${offer.total} изделий; остальные уточняйте`));}
-  else amount.append(el('small','',item.units?'Стоимость уточняется':'Ещё не в наличии'));
-  body.append(heading,amount,tags);appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);
+  if(offer.amount!==null){amount.append(el('strong','',`Цена от ${rubles(offer.amount)}`));amount.append(el('del','',rubles(offer.prc)),el('span','retail-discount',`−${offer.percent}% от ПРЦ`));if(offer.known<offer.total)amount.append(el('small','',`ПРЦ указана для ${offer.known} из ${offer.total} изделий; остальные уточняйте`));}
+  else amount.append(el('strong','',item.units?'Цена от — уточняется':'Ещё не в наличии'));
+  heading.append(amount);body.append(heading,tags);if(!clientView){appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);}
   const stickers=el('div','photo-stickers');
   const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
   const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Последнее поступление':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
@@ -240,7 +244,7 @@ function card(item) {
   for(const size of item.sizes) sizeList.append(el('span','size-badge'+(state.size===size.s?' selected':''),`${size.s} · ${size.q}`));
   if(!item.sizes.length) sizeList.append(el('p','no-sizes','Не указаны'));
   sizes.append(sizeList);body.append(sizes);
-  if(item.stock_codes) {
+  if(!clientView&&item.stock_codes) {
     const codes=el('details','unit-codes');codes.append(el('summary','','ЮР-коды по точкам'));
     for(const [stock,entries] of Object.entries(item.stock_codes)) {
       const group=el('section','unit-code-store');group.append(el('h3','',stock));
@@ -285,7 +289,7 @@ async function load() {
     let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
     generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
     domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
-    $('search').value=state.q;updateFreshness();render();
+    $('search').value=state.q;updateFreshness();render();void refreshApprovedPhotos();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
     const withoutPhoto=items.filter(item=>!hasProductPhoto(item)).length;
     $('footer').textContent=`Источник: Товар_Каратник · Исходники. Дата обновления указана вверху каталога. Без фото: ${number.format(withoutPhoto)} из ${number.format(items.length)}.`;
@@ -308,11 +312,25 @@ $('filter-dialog').addEventListener('close',()=>{document.body.style.overflow=''
 $('close-photo').addEventListener('click',()=>$('photo-dialog').close());
 for(const id of ['filter-dialog','photo-dialog']) $(id).addEventListener('click',event=>{const box=$(id).getBoundingClientRect();if(event.target===$(id)&&(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom))$(id).close();});
 $('share-selection').addEventListener('click',async()=>{
-  clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');render();
-  let message='Ссылка находится в адресной строке — её можно скопировать';
-  try {await navigator.clipboard.writeText(location.href);message='Ссылка на выборку скопирована';} catch {}
-  $('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3500);
+ clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');render();
+ const url=clientSelectionUrl(state,location.href);let message='';
+ if(navigator.share){try{await navigator.share({title:'Каратник — подборка украшений',text:'Подборка украшений по вашим пожеланиям',url});message='Подборка передана для отправки';}catch(error){if(error.name==='AbortError')return;}}
+ if(!message){try{await navigator.clipboard.writeText(url);message='Ссылка для клиента скопирована — вставьте её в сообщение';}catch{$('share-url').value=url;$('share-dialog').showModal();$('share-url').select();return;}}
+ $('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500);
 });
+$('close-share').addEventListener('click',()=>$('share-dialog').close());
+$('copy-share').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('share-url').value);$('share-copy-result').textContent='Скопировано. Вставьте ссылку в сообщение клиенту.';}catch{$('share-url').select();$('share-copy-result').textContent='Скопируйте выделенную ссылку сочетанием Ctrl+C или долгим нажатием.';}});
+let photoRefreshBusy=false;
+async function refreshApprovedPhotos(){
+ if(photoRefreshBusy)return;photoRefreshBusy=true;
+ try{const fresh=await loadApprovedPhotos({live:true});if(!fresh.size)return;
+  const signature=map=>JSON.stringify([...map.values()].map(p=>[p.key,p.url,p.photos]));if(signature(fresh)===signature(approvedPhotos))return;
+  approvedPhotos=fresh;items=prepareItems(items.map(p=>{const approved=fresh.get(photoPair(p.art,p.marka));return approved?{...p,photo:approved.url,photoFallback:p.photoFallback||p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:p;}));
+  domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();
+ }finally{photoRefreshBusy=false;}
+}
+window.addEventListener('focus',()=>{if(items.length)void refreshApprovedPhotos();});
+setInterval(()=>{if(items.length&&!document.hidden)void refreshApprovedPhotos();},60000);
 window.addEventListener('popstate',()=>{clearTimeout(inputTimer);state=parseState(location.search);$('search').value=state.q;if(items.length)render();});
 new ResizeObserver(()=>document.documentElement.style.setProperty('--header-height',`${$('site-header').getBoundingClientRect().height}px`)).observe($('site-header'));
 if('IntersectionObserver' in window) new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)&&shown<filtered.length) appendCards();},{rootMargin:'350px'}).observe($('load-more-wrap'));

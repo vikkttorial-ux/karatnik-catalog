@@ -27,16 +27,16 @@ export function prepareItems(items) {
     _codeNumbers:(item.codes||[]).map(codeNumber).filter(Boolean)
   }));
 }
-export function blankState() {return {q:'',rubMin:'',rubMax:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
+export function blankState() {return {q:'',rubMin:'',rubMax:'',client:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
 export function parseState(search) {
   const params = new URLSearchParams(search), state=blankState();
-  for(const key of ['q','rubMin','rubMax',...FILTER_KEYS]) state[key]=params.get(key) || '';
+  for(const key of ['q','rubMin','rubMax','client',...FILTER_KEYS]) state[key]=params.get(key) || '';
   if(!supportsSize(state.tip)) state.size='';
   return state;
 }
 export function serializeState(state) {
   const params=new URLSearchParams();
-  for(const key of ['q','rubMin','rubMax',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
+  for(const key of ['q','rubMin','rubMax','client',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
   return params.toString();
 }
 export function valuesFor(item,key) {

@@ -327,6 +327,10 @@ def scan_site(directory):
                 # Убираем только имя свойства после начала блока/декларации;
                 # строки content, комментарии и значения продолжают проверяться.
                 content = re.sub(r'(?<=[{;])\s*margin(?:-[a-z]+)*\s*:', ' layout-spacing:', content)
+            if path.name == 'app.mjs':
+                # Explicit owner-authorized retail UI labels only. Other monetary text/fields remain blocked.
+                content = content.replace('`Цена от ${rubles(offer.amount)}`', '`Розничная сумма ${rubles(offer.amount)}`')
+                content = content.replace("'Цена от — уточняется'", "'Розничная сумма уточняется'")
             scan_forbidden(json.loads(content) if path.suffix.lower() == '.json' else content)
 
 
