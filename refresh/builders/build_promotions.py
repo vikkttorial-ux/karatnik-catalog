@@ -105,6 +105,17 @@ def is_returned_after_sellout(previous_positive, gap_snapshot, replenishment, sa
  if not (window_start<=right and left<gap<right):return False
  return any(left<d<=gap for d in sales_dates) and any(gap<d<=right for d in receipt_dates)
 
+def returned_after_history(ordered, model_key, sales_dates, receipt_dates, window_start):
+ """Keep the beginning of each positive interval: late source updates can trail a sale."""
+ period_start=None;gap=None
+ for stamp,snapshot in ordered:
+  if snapshot.get(model_key,{}).get('units',0)>0:
+   if gap and is_returned_after_sellout(period_start,gap,stamp,sales_dates,receipt_dates,window_start):return True
+   if period_start is None or gap:period_start=stamp
+   gap=None
+  elif period_start and gap is None:gap=stamp
+ return False
+
 def replenished_size_names(old_snapshot, new_snapshot, arrival_sizes, window_start):
  """Report only sizes positive now that returned after zero with a master receipt."""
  if old_snapshot.get('units',0)<=0 or new_snapshot.get('units',0)<=0:return set()
@@ -180,16 +191,10 @@ def build():
   dates=sorted(d for d,_ in arrivals[k]);first=dates[0] if dates else None
   older_presence=bool(first and any(stamp[:10]<first and (p:=snapshot.get(k)) and p['units']>0 for stamp,snapshot in ordered))
   if k in live and not older_presence and is_new_arrival(first,today,k in master_available):tags.append('Новинка')
-  previous_positive=None;gap_snapshot=None
-  for stamp,snapshot in ordered:
-   p=snapshot.get(k)
-   if p and p['units']>0:
-    if (gap_snapshot and k in master_available and 'Новинка' not in tags
-        and 'Скоро в продаже' not in tags
-        and is_returned_after_sellout(previous_positive,gap_snapshot,stamp,sale_dates[k],[d for d,_ in arrivals[k]],events)):
-     if 'Вернулись в наличие' not in tags:tags.append('Вернулись в наличие')
-    previous_positive=stamp;gap_snapshot=None
-   elif previous_positive and gap_snapshot is None:gap_snapshot=stamp
+  if (k in live and k in master_available and 'Новинка' not in tags
+      and 'Скоро в продаже' not in tags
+      and returned_after_history(ordered,k,sale_dates[k],[d for d,_ in arrivals[k]],events)):
+   tags.append('Вернулись в наличие')
   for (before,old),(after,new) in zip(ordered,ordered[1:]):
    if after[:10]<events or k not in old or k not in new:continue
    sizes.update(replenished_size_names(old[k],new[k],[(d,z) for d,z in arrivals[k] if before[:10]<d<=after[:10]],before[:10]))

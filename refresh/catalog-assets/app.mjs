@@ -35,6 +35,7 @@ function button(className,text,handler) {const node=el('button',className,text);
 function positionWord(n) {const x=n%100,y=n%10;return x>=11&&x<=14?'позиций':y===1?'позиция':y>=2&&y<=4?'позиции':'позиций';}
 function filterLabel(key) {if(key==='char2'&&state.tip==='Серьги')return 'Вид серёг (характеристика 2)';return key==='thickness'&&state.tip==='Кольцо'?'Ширина шинки':labels[key];}
 function labelFor(key,value) {
+  if(key==='selection'&&value==='Вернулись в наличие')return 'Снова в наличии';
   if(key==='rubMin'||key==='rubMax')return (key==='rubMin'?'От ':'До ')+rubles(rubBound(value));
   if(key==='cvet') return COLORS[value]||value;
   if(key==='proba') return value==='585'?'585 золото':value==='925'?'925 серебро':value;
@@ -207,7 +208,7 @@ function card(item) {
   else amount.append(el('strong','',item.units?'Цена от — уточняется':'Ещё не в наличии'));
   heading.append(amount);body.append(heading,tags);if(!clientView){appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);}
   const stickers=el('div','photo-stickers');
-  const titles={'Вернулись в наличие':'Вернулось в продажу','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
+  const titles={'Вернулись в наличие':'Снова в наличии','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
   const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Последнее поступление':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
   for(const label of item.promotions?.tags||[])stickers.append(el('span','photo-sticker '+(colors[label]||''),titles[label]||label));
   visual.append(stickers);

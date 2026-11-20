@@ -11,7 +11,7 @@ export function appendPromotions(card,p,data){
 export function addSelectionFilter(host,id,onChange){const label=document.createElement('label');label.textContent='Подборка';const select=document.createElement('select');select.id=id;for(const text of ['Все',...SELECTIONS]){const o=document.createElement('option');o.value=text==='Все'?'':text;o.textContent=text;select.append(o);}label.append(select);host.prepend(label);select.addEventListener('input',onChange);return select;}
 
 export function defaultPromotionOrder(items,state={}) {
- if(Object.values(state).some(value=>String(value||'').trim()))return items;
+ if(Object.entries(state).some(([key,value])=>key!=='client'&&String(value||'').trim()))return items;
  const rank=item=>{
   const tags=item.promotions?.tags||[];
   return tags.includes('Последнее поступление')?0:tags.includes('Новинка месяца')?1:tags.includes('Новинка')?2:3;
