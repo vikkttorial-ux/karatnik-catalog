@@ -59,10 +59,33 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: site
+      - name: Дождаться готовности пакета публикации
+        env:
+          ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          python - <<'PY'
+          import os, time, requests
+          url = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID'] + '/artifacts'
+          for attempt in range(20):
+              response = requests.get(url, params={'name': os.environ['ARTIFACT_NAME']}, timeout=20)
+              response.raise_for_status()
+              artifacts = [a for a in response.json().get('artifacts', []) if a['name'] == os.environ['ARTIFACT_NAME'] and not a['expired']]
+              if len(artifacts) == 1:
+                  print('Пакет публикации готов.')
+                  break
+              if len(artifacts) > 1:
+                  raise RuntimeError('Повтор пакета текущей попытки.')
+              time.sleep(3)
+          else:
+              raise RuntimeError('Пакет ещё не доступен для размещения; предыдущая версия сохранена.')
+          PY
       - name: Опубликовать
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Активировать согласованную версию отчёта
         run: python refresh/run.py --commit
