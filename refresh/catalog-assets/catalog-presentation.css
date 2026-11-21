@@ -1,0 +1,47 @@
+/* A shared, stable photo canvas for all catalogue views and gallery frames. */
+.card-photo,
+.product figure {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  flex: none;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+.card-photo .photo-button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: #fff;
+}
+.card-photo img,
+.product figure img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  padding: clamp(12px, 5%, 20px);
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+}
+.card-photo .photo-placeholder,
+.product figure .no-photo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-photo .photo-placeholder { flex-direction: column; }
+/* Keep related items' thumbnails consistent without affecting the large viewer. */
+.set-peer img { background: #fff; object-fit: contain; object-position: center; }
