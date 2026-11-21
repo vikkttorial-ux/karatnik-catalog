@@ -102,3 +102,7 @@ h1{font:26px/1.2 Georgia,serif}
 @media(max-height:540px){.header-inner{grid-template-columns:auto minmax(0,1fr);padding-top:4px;padding-bottom:4px}.brand-row{display:none}.workspace-nav{grid-column:1;grid-row:1;max-width:45vw}.search-row{grid-column:2;grid-row:1}.type-nav{display:none}.header-count{display:none}.brand-site-link{display:none}.cards{gap:14px}.filter-trigger{display:flex}.page-shell{padding-top:4px}.results-heading{margin-bottom:4px}}
 @media(pointer:coarse){.heart,.icon-button{min-width:44px;min-height:44px}.workspace-tab,.type-chip{position:relative}.workspace-tab::after,.type-chip::after{content:'';position:absolute;inset:-2px 0}.mobile-filters .chip{min-height:44px}}
 @media(prefers-reduced-motion:reduce){button,a,summary{transition:none}}
+
+/* Supplied Karatnik ornament replaces the temporary letter mark. */
+.brand-mark{border:0;border-radius:0;background:transparent}
+.brand-mark img{display:block;width:100%;height:100%;object-fit:contain}
