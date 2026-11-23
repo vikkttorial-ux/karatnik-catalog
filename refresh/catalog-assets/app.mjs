@@ -5,7 +5,7 @@ import {mountPhotoGallery} from './photo-gallery.mjs?v=sets1120';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
 import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=campaign1130';
 
-import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=sets1120';
+import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=stock1123';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
 import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=sets1120';
 const $=id=>document.getElementById(id);

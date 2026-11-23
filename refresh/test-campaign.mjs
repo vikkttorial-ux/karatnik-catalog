@@ -30,7 +30,7 @@ const sample=[
 ];
 assert.deepEqual(defaultPromotionOrder(sample,blankState()).map(x=>x.art),['latest','month','new','ordinary']);
 assert.deepEqual(sample.map(x=>x.art),['ordinary','new','month','latest']);
-for(const state of [{q:'кольцо'},{stock:'Ленинградская 33'},{tip:'Кольцо'}])assert.equal(defaultPromotionOrder(sample,{...blankState(),...state}),sample);
+for(const state of [{q:'кольцо'},{stock:'Ленинградская 33'},{tip:'Кольцо'}])assert.deepEqual(defaultPromotionOrder(sample,{...blankState(),...state}),sample);
 const model=prepareItems([{art:'КЛ-63',marka:'ГолденГлоб',naim:'Кольцо',sizes:[{s:'17',q:1}],codes:['ЮР-1'],stocks:{A:1},units:1}]);
 for(const q of ['КЛ-63','КольцоКЛ-63','КольцоКЛ-63/17,0/бцФ/з585'])assert.equal(filterItems(model,{...blankState(),q}).length,1);
 assert.equal(filterItems(model,{...blankState(),q:'КольцоКЛ-63/17,0/бцФ/бз585'}).length,0);
@@ -46,6 +46,30 @@ console.log('Default new-first ordering, active-filter order and confirmed artic
  assert.equal(formatUnitDetails(bracelet.stock_codes.A[0]).color,'Белое');
  const chain=prepareItems([{...bracelet,art:'ЦНН20517035',marka:'Каратов'}]);
  assert.equal(filterItems(chain,{...blankState(),q:'ЦНН20517035-РА'}).length,1);
+}
+
+
+{
+ const stocked=(art,tags=[],stocks={'Ленинградская 33':1})=>({art,stocks,promotions:{tags}});
+ const input=[
+  stocked('unknown-latest',['Последнее поступление'],{'Склад не указан':1}),
+  stocked('known-ordinary'),
+  stocked('mixed',['Новинка'],{'Склад не указан':1,'Гостинка (В.Е.Левин)':1}),
+  stocked('no-stock',[],{}),
+  stocked('known-latest',['Последнее поступление']),
+  stocked('zero-stock',[],{'Ленинградская 33':0}),
+  stocked('upcoming',['Скоро в продаже'],undefined)
+ ];
+ delete input.at(-1).stocks;
+ const original=structuredClone(input);
+ assert.deepEqual(defaultPromotionOrder(input,blankState()).map(x=>x.art),['known-latest','mixed','known-ordinary','unknown-latest','no-stock','zero-stock','upcoming']);
+ for(const state of [{q:'кольцо'},{stock:'Склад не указан'},{tip:'Кольцо'},{rubMin:'1000'},{set:'SET-0001'}]){
+  assert.deepEqual(defaultPromotionOrder(input,{...blankState(),...state}).map(x=>x.art),['known-ordinary','mixed','known-latest','unknown-latest','no-stock','zero-stock','upcoming']);
+ }
+ assert.deepEqual(defaultPromotionOrder(input,{...blankState(),client:'1'}).map(x=>x.art),defaultPromotionOrder(input,blankState()).map(x=>x.art));
+ assert.deepEqual(input,original);
+ assert.equal(defaultPromotionOrder(input,blankState()).length,input.length);
+ console.log('Assigned-stock cards precede unassigned cards; mixed stock, filters, client links and unchanged inputs passed');
 }
 
 await import('./test-retail.mjs');
