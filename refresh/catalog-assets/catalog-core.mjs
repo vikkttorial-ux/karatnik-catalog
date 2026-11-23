@@ -1,4 +1,4 @@
-import {matchesRetail} from './retail-core.mjs?v=retail1120b';
+import {matchesRetail} from './retail-core.mjs?v=campaign1130';
 import {setKey} from './set-core.mjs?v=sets1120';
 // Чистые функции поиска и фильтров: используются страницей и проверками.
 export const FILTER_KEYS = ['selection','tip','size','char2','char3','thickness','lock','marka','proba','cvet','polnpust','kamni','stock','photo','inspired_by','pendant_kind','religion','motif','saint'];

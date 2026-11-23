@@ -1,4 +1,4 @@
-export const GOLD_EVENT={starts:'2026-11-20',ends:'2026-11-22',percent:40};
+export const GOLD_EVENT={starts:'2026-11-20',ends:'2026-11-30',percent:40};
 const dayFormatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'});
 let cachedMinute=NaN,cachedDay='';
 export function retailDay(now=new Date()){
@@ -32,6 +32,6 @@ export function retailOffer(item,state={},now=new Date()){
  return {amount:cheapest?.rub??null,prc:cheapest?.entry.prc??null,percent:retailPercent(item,now),known:valid.length,total:units.length,eligible:eligible.length};
 }
 export function matchesRetail(item,state,now=new Date()){return rubBound(state.rubMin)===null&&rubBound(state.rubMax)===null||retailOffer(item,state,now).amount!==null;}
-export function retailBanner(now=new Date()){const day=retailDay(now);return day>=GOLD_EVENT.starts&&day<=GOLD_EVENT.ends?'20–22 ноября · всё золото −40% · серебро −20%':'Золото и серебро −20%';}
+export function retailBanner(now=new Date()){const day=retailDay(now);return day>=GOLD_EVENT.starts&&day<=GOLD_EVENT.ends?'До 30 ноября включительно · всё золото −40% · серебро −20%':'Золото и серебро −20%';}
 const rubFormatter=new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:2});
 export const rubles=value=>rubFormatter.format(value);
