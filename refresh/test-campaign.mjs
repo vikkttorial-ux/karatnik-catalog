@@ -95,3 +95,6 @@ await import('./test-retail.mjs');
 }
 
 await import('./test-sets.mjs');
+
+await import('./test-selection.mjs');
+
