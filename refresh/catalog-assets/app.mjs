@@ -180,7 +180,7 @@ function render() {
   $('empty-panel').hidden=filtered.length!==0;
   appendCards();selectionEditor.refresh();
   const notice=$('client-selection-note');notice.hidden=!(clientView&&state.picks);
-  if(!notice.hidden){const chosen=decodeSelection(state.picks),available=items.filter(p=>selectionContains(state.picks,p)).length;notice.textContent=chosen.length?'Для вас выбрано '+chosen.length+' изделий. Цены и наличие обновляются.'+(available<chosen.length?' Сейчас недоступно: '+(chosen.length-available)+'.':''):'Ссылка на подборку повреждена. Попросите продавца отправить её заново.';}
+  if(!notice.hidden){const chosen=decodeSelection(state.picks),available=items.filter(p=>selectionContains(state.picks,p)).length;notice.textContent=chosen.length?'Для вас выбрано '+chosen.length+' изделий. Стоимость и наличие обновляются.'+(available<chosen.length?' Сейчас недоступно: '+(chosen.length-available)+'.':''):'Ссылка на подборку повреждена. Попросите продавца отправить её заново.';}
   if(focusHost&&focusKey) {
     const next=[...$(focusHost).querySelectorAll('button')].find(b=>b.dataset.key===focusKey&&b.dataset.value===focusValue);
     next?.focus({preventScroll:true});

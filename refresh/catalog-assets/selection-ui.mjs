@@ -20,7 +20,7 @@ export function createSelectionEditor({client,getItems,getFiltered,send}){
  const dialog=make('dialog',undefined,'selection-dialog');dialog.setAttribute('aria-labelledby','selection-review-title');
  const heading=make('div',undefined,'selection-dialog-heading'),title=make('h2','Подборка для клиента');title.id='selection-review-title';
  heading.append(title,btn('×',()=>dialog.close(),'icon-button'));heading.lastChild.setAttribute('aria-label','Закрыть подборку');
- const note=make('p','Отправятся только оставленные здесь изделия. Цены и наличие будут актуальными на момент открытия.');
+ const note=make('p','Отправятся только оставленные здесь изделия. Стоимость и наличие будут актуальными на момент открытия.');
  const list=make('div',undefined,'selection-review-list'),message=make('p',undefined,'selection-status');message.setAttribute('role','status');
  const actions=make('div',undefined,'selection-actions');
  const share=btn('Отправить клиенту',()=>{try{const url=selectedClientUrl([...selected.values()],location.href);dialog.close();void send(url);}catch(e){message.textContent=e.message;}},'primary-button');
@@ -41,7 +41,7 @@ export function createSelectionEditor({client,getItems,getFiltered,send}){
    if(item?.photo){const img=make('img');img.src=item.photo;img.alt=item.art;img.width=64;img.height=64;row.append(img);}
    const text=make('div');text.append(make('strong',p.art),make('p',p.marka));
    const amount=item?retailOffer(item,{}).amount:null;
-   text.append(make('p',item?'Цена от '+(amount===null?'уточняется':rubles(amount)):'Больше нет в наличии — в ссылке не появится'));
+   text.append(make('p',item?'От '+(amount===null?'уточняется':rubles(amount)):'Больше нет в наличии — в ссылке не появится'));
    row.append(text,btn('Убрать',()=>{selected.delete(key);save();review();}));list.append(row);
   }
   if(!selected.size)list.append(make('p','Здесь пока нет изделий. Вернитесь к поиску и нажмите «В подборку».'));
