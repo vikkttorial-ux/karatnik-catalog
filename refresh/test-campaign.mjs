@@ -98,3 +98,5 @@ await import('./test-sets.mjs');
 
 await import('./test-selection.mjs');
 
+
+await import('./test-gallery.mjs');

@@ -5,7 +5,7 @@ import {decodeSelection,selectionContains} from './selection-core.mjs?v=picks112
 import {validateSets,attachSets,relatedSets,setLink,setKey} from './set-core.mjs?v=sets1120';
 import {clientSelectionUrl} from './share-core.mjs?v=picks1124';
 import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=campaign1130';
-import {mountPhotoGallery} from './photo-gallery.mjs?v=sets1120';
+import {mountPhotoGallery} from './photo-gallery.mjs?v=detail1125';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=nav1125';
 import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=picks1124';
 
@@ -214,7 +214,7 @@ function appendSetLinks(host,item){
 function openPhoto(item) {
   closeGallery();
   $('large-photo').src=item.photo;$('large-photo').alt=`${item.tip}, ${item.art}`;
-  $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0});$('photo-sets').replaceChildren();$('photo-dialog').classList.toggle('with-sets',appendSetLinks($('photo-sets'),item));$('photo-dialog').showModal();
+  $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0,viewer:true});$('photo-sets').replaceChildren();$('photo-dialog').classList.toggle('with-sets',appendSetLinks($('photo-sets'),item));$('photo-dialog').showModal();
 }
 function card(item) {
   const article=el('article','card');article.dataset.art=item.art;article.dataset.brand=item.marka||'';
@@ -400,3 +400,4 @@ load();
 // Save the exact working selection before leaving for an editor or another catalog screen.
 document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;let u;try{u=new URL(link.href,location.href);}catch{return;}if(u.origin==='https://karatnik-product-photos.workspace-903713.chatgpt.site'||u.pathname.endsWith('/smart-search.html')){clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');rememberCatalogReturn({shown,anchor:link.closest('.card')?.dataset.art||''});if(u.origin==='https://karatnik-product-photos.workspace-903713.chatgpt.site')link.href=editorUrl(u.href,location.href);}},true);
 const backbar=el('div','catalog-backbar'),back=button('','Назад',()=>{const open=document.querySelector('dialog[open]');if(open){open.close();return;}if(history.state?.catalogDepth>0){history.back();return;}if(location.search){resetAll();return;}window.scrollTo({top:0,behavior:'smooth'});});backbar.append(back,el('span','','Фильтры сохраняются при переходе в редактор'));$('results').prepend(backbar);
+
