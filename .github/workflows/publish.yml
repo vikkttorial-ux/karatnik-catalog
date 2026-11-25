@@ -73,7 +73,10 @@ jobs:
               response.raise_for_status()
               artifacts = [a for a in response.json().get('artifacts', []) if a['name'] == os.environ['ARTIFACT_NAME'] and not a['expired']]
               if len(artifacts) == 1:
-                  print('Пакет публикации готов.')
+                  print('Пакет публикации готов. Ожидаем синхронизацию индекса сервиса размещения.')
+                  # The REST artifact index can lead the Results index used by deploy-pages.
+                  # Keep the attempt-specific name and all existing source/privacy checks.
+                  time.sleep(60)
                   break
               if len(artifacts) > 1:
                   raise RuntimeError('Повтор пакета текущей попытки.')
