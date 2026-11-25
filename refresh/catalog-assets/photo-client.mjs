@@ -1,3 +1,4 @@
+import {editorUrl} from './navigation-context.mjs?v=nav1125';
 import {galleryPhotoUrl} from './photo-gallery.mjs?v=gallery-1119';
 export const PHOTO_PORTAL = 'https://karatnik-product-photos.workspace-903713.chatgpt.site';
 const MANIFEST_URL = `${PHOTO_PORTAL}/api/public/photos`;
@@ -12,7 +13,7 @@ export function photoPair(art, brand) {
 export async function photoUploadUrl(art, brand) {
   const key = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(photoPair(art, brand)));
   const hex = [...new Uint8Array(key)].map(byte => byte.toString(16).padStart(2, '0')).join('');
-  return `${PHOTO_PORTAL}/?product=${encodeURIComponent(hex)}`;
+  return editorUrl(`${PHOTO_PORTAL}/?product=${encodeURIComponent(hex)}`,location.href);
 }
 
 export function approvedPhotoMap(manifest) {
@@ -40,8 +41,9 @@ export function appendPhotoUploadLink(container, art, brand) {
   link.addEventListener('click', async event => {
     event.preventDefault();
     try { location.assign(await photoUploadUrl(art, brand)); }
-    catch { location.assign(PHOTO_PORTAL); }
+    catch { location.assign(editorUrl(PHOTO_PORTAL,location.href)); }
   });
   container.append(link);
   return link;
 }
+

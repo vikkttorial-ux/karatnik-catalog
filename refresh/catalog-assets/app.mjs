@@ -1,15 +1,17 @@
+import {restoreCatalogLocation,rememberCatalogReturn} from './navigation-context.mjs?v=nav1125';
+const returningCatalog=restoreCatalogLocation();
 import {createSelectionEditor} from './selection-ui.mjs?v=picks1124';
 import {decodeSelection,selectionContains} from './selection-core.mjs?v=picks1124';
 import {validateSets,attachSets,relatedSets,setLink,setKey} from './set-core.mjs?v=sets1120';
 import {clientSelectionUrl} from './share-core.mjs?v=picks1124';
 import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=campaign1130';
 import {mountPhotoGallery} from './photo-gallery.mjs?v=sets1120';
-import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=attrs-1109';
+import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=nav1125';
 import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=picks1124';
 
 import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=stock1123';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
-import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=sets1120';
+import {appendPhotoUploadLink,loadApprovedPhotos,photoPair} from './photo-client.mjs?v=nav1125';
 const $=id=>document.getElementById(id);
 const clientView=new URLSearchParams(location.search).get('client')==='1';
 document.documentElement.classList.toggle('client-view',clientView);
@@ -49,7 +51,7 @@ function labelFor(key,value) {
 }
 function updateUrl(mode='push') {
   const query=serializeState(state),url=location.pathname+(query?'?'+query:'');
-  if(url!==location.pathname+location.search) history[mode==='replace'?'replaceState':'pushState'](null,'',url);
+  if(url!==location.pathname+location.search) history[mode==='replace'?'replaceState':'pushState']({catalogDepth:(history.state?.catalogDepth||0)+(mode==='replace'?0:1)},'',url);
 }
 function changeFilter(key,value) {
   clearTimeout(inputTimer);
@@ -215,7 +217,7 @@ function openPhoto(item) {
   $('photo-caption').textContent=item.art;closeGallery=mountPhotoGallery($('large-photo').parentElement,$('large-photo'),item,{start:item.galleryIndex||0});$('photo-sets').replaceChildren();$('photo-dialog').classList.toggle('with-sets',appendSetLinks($('photo-sets'),item));$('photo-dialog').showModal();
 }
 function card(item) {
-  const article=el('article','card');article.dataset.art=item.art;
+  const article=el('article','card');article.dataset.art=item.art;article.dataset.brand=item.marka||'';
   const visual=el('div','card-photo');
   if(validPhotoPath(item.photo)||item.photoSource==='approved') {
     const open=button('photo-button','',()=>openPhoto(item));open.setAttribute('aria-label',`Открыть фото ${item.art}`);
@@ -319,7 +321,7 @@ async function load() {
     let attributeOverrides=new Map();try{attributeOverrides=await loadAttributeOverrides();}catch(e){const warning=el('p','no-sizes',e.message);$('results').prepend(warning);}
     generatedAt=data.generated_at;approvedPhotos=await loadApprovedPhotos();items=prepareItems(showcase(data,promotions).items.map(source=>{const p=applyAttributeOverrides(source,attributeOverrides);const approved=approvedPhotos.get(photoPair(p.art,p.marka));return withCampaign({...p,...(approved?{photo:approved.url,photoFallback:p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:{}),promotions:promotionInfo(p,promotions)},campaignManifest);}));
     items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));
-    $('search').value=state.q;updateFreshness();render();void refreshApprovedPhotos();
+    $('search').value=state.q;updateFreshness();render();if(returningCatalog){while(shown<Math.min(returningCatalog.shown,filtered.length))appendCards();requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:returningCatalog.scrollY,behavior:'instant'})));}void refreshApprovedPhotos();
     $('search').disabled=false;$('open-filters').disabled=false;$('share-selection').disabled=false;
     const withoutPhoto=items.filter(item=>!hasProductPhoto(item)).length;
     $('footer').textContent=`Источник: Товар_Каратник · Исходники. Дата обновления — в фильтрах каталога. Без фото: ${number.format(withoutPhoto)} из ${number.format(items.length)}.`;
@@ -362,7 +364,7 @@ async function refreshApprovedPhotos(){
  try{const fresh=await loadApprovedPhotos({live:true});if(!fresh.size)return;
   const signature=map=>JSON.stringify([...map.values()].map(p=>[p.key,p.url,p.photos]));if(signature(fresh)===signature(approvedPhotos))return;
   approvedPhotos=fresh;items=prepareItems(items.map(p=>{const approved=fresh.get(photoPair(p.art,p.marka));return approved?{...p,photo:approved.url,photoFallback:p.photoFallback||p.photo,photoSource:'approved',photoGallery:approved.photos||[]}:p;}));
-  items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));render();
+  items=prepareItems(attachSets(items,setsManifest));domains=Object.fromEntries(FILTER_KEYS.map(key=>[key,sortedDomain(key)]));const oldShown=shown,oldY=window.scrollY;render();while(shown<Math.min(oldShown,filtered.length))appendCards();requestAnimationFrame(()=>window.scrollTo({top:oldY,behavior:'instant'}));
  }finally{photoRefreshBusy=false;}
 }
 window.addEventListener('focus',()=>{if(items.length)void refreshApprovedPhotos();});
@@ -393,3 +395,8 @@ load();
 
 
 
+
+
+// Save the exact working selection before leaving for an editor or another catalog screen.
+document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;let u;try{u=new URL(link.href,location.href);}catch{return;}if(u.origin==='https://karatnik-product-photos.workspace-903713.chatgpt.site'||u.pathname.endsWith('/smart-search.html')){clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');rememberCatalogReturn({shown,anchor:link.closest('.card')?.dataset.art||''});}},true);
+const backbar=el('div','catalog-backbar'),back=button('','Назад',()=>{const open=document.querySelector('dialog[open]');if(open){open.close();return;}if(history.state?.catalogDepth>0){history.back();return;}if(location.search){resetAll();return;}window.scrollTo({top:0,behavior:'smooth'});});backbar.append(back,el('span','','Фильтры сохраняются при переходе в редактор'));$('results').prepend(backbar);

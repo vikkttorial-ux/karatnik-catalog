@@ -1,4 +1,4 @@
-import {photoUploadUrl,photoPair} from './photo-client.mjs?v=attrs-1109';
+import {photoUploadUrl,photoPair} from './photo-client.mjs?v=nav1125';
 const API='https://karatnik-product-photos.workspace-903713.chatgpt.site/api/public/attributes';
 export async function loadAttributeOverrides(){
  const r=await fetch(API,{cache:'no-store',mode:'cors',signal:AbortSignal.timeout(6000)});
@@ -20,3 +20,4 @@ export function appendAttributeLink(container,art,brand){
  const link=document.createElement('a');link.className='add-photo-link';link.textContent='Дополнить характеристики';link.href='https://karatnik-product-photos.workspace-903713.chatgpt.site/attributes';
  link.addEventListener('click',async e=>{e.preventDefault();try{const u=new URL(await photoUploadUrl(art,brand));u.pathname='/attributes';location.assign(u.href);}catch{location.assign(link.href);}});container.append(link);
 }
+

@@ -1,8 +1,8 @@
 import {configureFeedback,appendFeedbackButtons,attachNotFound} from './search-feedback-client.mjs?v=feedback-1';
 import {parseClientQuery,rankTextProducts} from './smart-text.mjs?v=feedback-1';
 import {VisionEngine,decodeIndex,nearest,pixelsForCrop} from './smart-vision.mjs?v=1';
-import {loadApprovedPhotos,photoPair,hasProductPhoto,appendPhotoUploadLink} from './photo-client.mjs?v=attrs-1109';
-import {loadAttributeOverrides,applyAttributeOverrides} from './attribute-client.mjs?v=attrs-1109';
+import {loadApprovedPhotos,photoPair,hasProductPhoto,appendPhotoUploadLink} from './photo-client.mjs?v=nav1125';
+import {loadAttributeOverrides,applyAttributeOverrides} from './attribute-client.mjs?v=nav1125';
 const $=id=>document.getElementById(id),el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 const date=v=>new Date(v).toLocaleString('ru-RU'),num=v=>Number(v).toLocaleString('ru-RU',{maximumFractionDigits:2});
 let items=[],promo={},parsed=parseClientQuery(''),removed=[],mode='text',entries=[],limit=24,image=null,crop=null,start=null,vector=null,index=null,indexMeta=null,busy=false,fileVersion=0,photoRun=0;
@@ -57,3 +57,4 @@ async function boot(){try{const [base,pr,photos,attrs]=await Promise.all([fetch(
  $('freshness').textContent=`Остатки обновлены: ${date(base.generated_at)} · ${base.items.length} карточек`+(attrs?'':' · Дополнения характеристик недоступны — используются данные таблицы.');$('text-search').disabled=false;controls();const q=new URLSearchParams(location.search).get('q');if(q){$('query').value=q;$('text-form').requestSubmit();}
  }catch{$('freshness').textContent='Не удалось загрузить каталог. Обновите страницу. Поиск недоступен, чтобы не показывать непроверенное наличие.';}}
 boot();
+
