@@ -100,3 +100,6 @@ await import('./test-selection.mjs');
 
 
 await import('./test-gallery.mjs');
+
+
+await import('./test-selected-sale.mjs');

@@ -1,0 +1,2341 @@
+{
+  "version": 2,
+  "id": "selected-50-2026-11-27",
+  "name": "Избранные украшения −50%",
+  "starts_on": "2026-11-27",
+  "ends_on": "2026-11-29",
+  "timezone": "Europe/Moscow",
+  "discount_percent": 50,
+  "basis": "ПРЦ",
+  "stacking": "replace",
+  "items": [
+    {
+      "art": "ЗК1002/Сп.3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 1.71,
+          "baseAmount": 41500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/Рб",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 1.77,
+          "baseAmount": 43300,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/Рб.3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 1.95,
+          "baseAmount": 47000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1009/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16",
+          "grams": 1.47,
+          "baseAmount": 53600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2018/Сп.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 1.77,
+          "baseAmount": 54500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1008/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16",
+          "grams": 1.89,
+          "baseAmount": 55200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2015/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.59,
+          "baseAmount": 57200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/6Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 1.71,
+          "baseAmount": 59100,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1028/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.79,
+          "baseAmount": 67950,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2032/ВБр 3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.41,
+          "baseAmount": 74990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1014",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 1.45,
+          "baseAmount": 75500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1014/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 1.47,
+          "baseAmount": 76100,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1023/Бр.Сп.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.68,
+          "baseAmount": 77320,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1010/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.61,
+          "baseAmount": 77500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2018/Сп",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 2.91,
+          "baseAmount": 77700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1029/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.42,
+          "baseAmount": 79990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2029/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 1.49,
+          "baseAmount": 82990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1005/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.84,
+          "baseAmount": 84500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1005/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 2,
+          "baseAmount": 84900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2021/Лонд.Топ",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.4,
+          "baseAmount": 89600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1020/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 1.95,
+          "baseAmount": 99500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К1-Зл585К-229",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 2.31,
+          "baseAmount": 99800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1020/БрТ",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 2.88,
+          "baseAmount": 103800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1019",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "20,5",
+          "grams": 4.29,
+          "baseAmount": 107250,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2031/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 1.8,
+          "baseAmount": 107990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2030/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.68,
+          "baseAmount": 109990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1003/Сп.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 2.27,
+          "baseAmount": 110000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1015/Сп.4",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 1.94,
+          "baseAmount": 117600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1033/Изм",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 3.01,
+          "baseAmount": 122990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1015/Рб.4",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 2.09,
+          "baseAmount": 124600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "С2110241",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 1,
+          "baseAmount": 4500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "С2110249",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 1,
+          "baseAmount": 4880,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "С2110245",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 1,
+          "baseAmount": 5380,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "С211024",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 1,
+          "baseAmount": 8750,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Б2110244",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 10250,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Б211024",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 10630,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110241",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 11630,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110249",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 12000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110246",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 13750,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110248",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 14380,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110243",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 14500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110244",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 14500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110247",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 14500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110242",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 14880,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К2110250",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "безразм",
+          "grams": 1,
+          "baseAmount": 15750,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1015/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 1.25,
+          "baseAmount": 49500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/Вбр.3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.67,
+          "baseAmount": 55100,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1008/Вбр.3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.96,
+          "baseAmount": 56600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1016/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.58,
+          "baseAmount": 63900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/ВБр.3",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 1.99,
+          "baseAmount": 65700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2028/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.87,
+          "baseAmount": 67990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1018/Вбр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 1.86,
+          "baseAmount": 69300,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ140",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 3.66,
+          "baseAmount": 73200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1008",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 2.11,
+          "baseAmount": 74300,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1022/Вбр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 2.29,
+          "baseAmount": 74700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ18А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 3.45,
+          "baseAmount": 75900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16",
+          "grams": 3.83,
+          "baseAmount": 76600,
+          "quantity": 1
+        },
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 4.41,
+          "baseAmount": 88200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1019/Цит",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.28,
+          "baseAmount": 77400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1009/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16",
+          "grams": 2.22,
+          "baseAmount": 77600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1010/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 2,
+          "baseAmount": 79900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1009/ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 2.35,
+          "baseAmount": 81500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1019/ВБрТ",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 2.47,
+          "baseAmount": 83100,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗББ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19",
+          "grams": 4.16,
+          "baseAmount": 83200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1016",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 3.33,
+          "baseAmount": 83250,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗББЛ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19",
+          "grams": 4.18,
+          "baseAmount": 83600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1019/Вбр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.62,
+          "baseAmount": 84900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2024/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.21,
+          "baseAmount": 84900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1024/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.26,
+          "baseAmount": 86400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2001/Вбр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.05,
+          "baseAmount": 86500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ18",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 3.62,
+          "baseAmount": 86880,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ110А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19",
+          "grams": 4.72,
+          "baseAmount": 94400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2027/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 2.65,
+          "baseAmount": 94990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1017/Вбр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.86,
+          "baseAmount": 98700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1027/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.82,
+          "baseAmount": 98990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1003/ВБр.4",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 2.26,
+          "baseAmount": 99000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ББ140А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 5.17,
+          "baseAmount": 103400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1007/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 2.29,
+          "baseAmount": 103700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1007/Вбр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 2.39,
+          "baseAmount": 106700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗББ110А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 5.47,
+          "baseAmount": 109400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБ18",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "45",
+          "grams": 5.91,
+          "baseAmount": 118200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБРУЧ115",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 6.06,
+          "baseAmount": 121200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.8,
+          "baseAmount": 122400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1001/Вбр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 2.85,
+          "baseAmount": 123700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1002/Вбр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 2.86,
+          "baseAmount": 123900,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "К6",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 2.94,
+          "baseAmount": 126000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1023/Бр.ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 2.13,
+          "baseAmount": 128100,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1006/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 3,
+          "baseAmount": 130000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1023/ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 2.22,
+          "baseAmount": 130800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1015/Измр.4",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18,5",
+          "grams": 2.09,
+          "baseAmount": 133600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1024/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 3.35,
+          "baseAmount": 137700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС2024/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 3.35,
+          "baseAmount": 137700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБИС18",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 6.59,
+          "baseAmount": 144980,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ320",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19,5",
+          "grams": 8.09,
+          "baseAmount": 161800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦРУЧ18",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "45",
+          "grams": 8.22,
+          "baseAmount": 164400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ120",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19,5",
+          "grams": 8.29,
+          "baseAmount": 165800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1015/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19,5",
+          "grams": 2.07,
+          "baseAmount": 173800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "П13092024",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 8.9,
+          "baseAmount": 178000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБЛ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "45",
+          "grams": 8.96,
+          "baseAmount": 179200,
+          "quantity": 1
+        },
+        {
+          "store": "Ленинградская 33",
+          "size": "45",
+          "grams": 10.09,
+          "baseAmount": 202000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦРУЧ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "50",
+          "grams": 9.02,
+          "baseAmount": 180400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "П29072024",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 9.02,
+          "baseAmount": 180400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗББ120А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "22",
+          "grams": 9.24,
+          "baseAmount": 184800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1003/5.5Вбр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 3.73,
+          "baseAmount": 185000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЦБ140",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "45",
+          "grams": 9.51,
+          "baseAmount": 190200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦИТ110А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 8.7,
+          "baseAmount": 191400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1020/Изм.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 2.55,
+          "baseAmount": 191700,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБ110",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "50",
+          "grams": 9.73,
+          "baseAmount": 194600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ115А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "20",
+          "grams": 9.22,
+          "baseAmount": 202840,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК2020/ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.5,
+          "baseAmount": 203400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1011/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 9.73,
+          "baseAmount": 204500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС2021/Топ",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 6.2,
+          "baseAmount": 208800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗС1004/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 2.7,
+          "baseAmount": 210800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1020/Турмалин",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 3.18,
+          "baseAmount": 215200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБ115",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "50",
+          "grams": 12.02,
+          "baseAmount": 240400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЦИТ140А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "55",
+          "grams": 12.27,
+          "baseAmount": 245400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗБИТ130",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "21",
+          "grams": 12.57,
+          "baseAmount": 251400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1013/ВБр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 6.96,
+          "baseAmount": 258800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1012/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 8.52,
+          "baseAmount": 305600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1011",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 8.85,
+          "baseAmount": 333400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗЦБА145",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "55",
+          "grams": 16.98,
+          "baseAmount": 339600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ББ175А",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "21,5",
+          "grams": 17.15,
+          "baseAmount": 343000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1012",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18,5",
+          "grams": 10.35,
+          "baseAmount": 360000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК1011/Бр.",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 9.43,
+          "baseAmount": 372010,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЦИТ160",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "55",
+          "grams": 19.95,
+          "baseAmount": 399000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "11804518",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 2.39,
+          "baseAmount": 52580,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "11805487",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 2.56,
+          "baseAmount": 56320,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "11804477",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 2.59,
+          "baseAmount": 56980,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "11804527",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 3.03,
+          "baseAmount": 66660,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "21804518",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 4.19,
+          "baseAmount": 92180,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "21804527",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 4.24,
+          "baseAmount": 93280,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "21805487",
+      "brand": "Гранат",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 4.37,
+          "baseAmount": 96140,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК3026/Бр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 1.64,
+          "baseAmount": 129990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЗК3025/ВБр",
+      "brand": "Каратник",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 4.02,
+          "baseAmount": 349990,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ПдЛ52/бцФ/з585",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.46,
+          "baseAmount": 9200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "КольцоЛ-73",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16",
+          "grams": 1.47,
+          "baseAmount": 29400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т10201И439",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 0.76,
+          "baseAmount": 16720,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "КольцоЛ-75",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.49,
+          "baseAmount": 29800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14261И038",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.54,
+          "baseAmount": 33880,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "019991",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17",
+          "grams": 1.74,
+          "baseAmount": 33800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БНН20512030",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 1.03,
+          "baseAmount": 20600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14201И060",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18,5",
+          "grams": 1.43,
+          "baseAmount": 31460,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19591",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.62,
+          "baseAmount": 32400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19625",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "15",
+          "grams": 0.88,
+          "baseAmount": 17600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "51-110-02427-1",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.36,
+          "baseAmount": 28200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БГР00516060",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "19",
+          "grams": 5.09,
+          "baseAmount": 101800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БЛВ10512035",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 1.44,
+          "baseAmount": 28800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БРМ20516060",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19",
+          "grams": 3.83,
+          "baseAmount": 76600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БрТриКлвр10х2мм/онкс/з585",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "безразм",
+          "grams": 3.81,
+          "baseAmount": 76200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "КольцоЛ-74",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.73,
+          "baseAmount": 34600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ПдЛ52/глФ/з585",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.44,
+          "baseAmount": 8800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "СВ-014/С",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 0.44,
+          "baseAmount": 8800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т13061Д601",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 3.35,
+          "baseAmount": 67000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14061И157",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.25,
+          "baseAmount": 27500,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14201И226",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 1.52,
+          "baseAmount": 33440,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14261И220",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17,5",
+          "grams": 1.5,
+          "baseAmount": 33000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14761Д033",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "19",
+          "grams": 2.31,
+          "baseAmount": 46200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЦПКЛ30614040",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "40",
+          "grams": 2.64,
+          "baseAmount": 52800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ЦПЯК10310050",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "50",
+          "grams": 1.84,
+          "baseAmount": 36800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "019977",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18",
+          "grams": 2.12,
+          "baseAmount": 46640,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "019993",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "18",
+          "grams": 1.66,
+          "baseAmount": 33300,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "17478",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 1.62,
+          "baseAmount": 32400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "18493",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16,5",
+          "grams": 1.04,
+          "baseAmount": 20800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "18717",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "19,5",
+          "grams": 2.88,
+          "baseAmount": 57600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19402",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 3.06,
+          "baseAmount": 61200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19572",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "20",
+          "grams": 2.4,
+          "baseAmount": 48000,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19627",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 1.07,
+          "baseAmount": 21400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "19628",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "16,5",
+          "grams": 0.86,
+          "baseAmount": 17200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "200607",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.98,
+          "baseAmount": 19600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "20611",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.71,
+          "baseAmount": 14200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "51-110-02563-1",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "17,5",
+          "grams": 1.49,
+          "baseAmount": 29800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "51-123-02105-1",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.76,
+          "baseAmount": 15200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "51-130-02282-1",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 0.59,
+          "baseAmount": 11800,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "51-130-02931-1",
+      "brand": "Соколов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "",
+          "grams": 1.23,
+          "baseAmount": 24600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "БПН20412040",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16",
+          "grams": 1.62,
+          "baseAmount": 32400,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "ПдКругЛ01/голФ/з585",
+      "brand": "ГолденГлоб",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "",
+          "grams": 0.93,
+          "baseAmount": 18600,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14201Д713",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "19",
+          "grams": 2.26,
+          "baseAmount": 49720,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14201И353",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Гостинка (В.Е.Левин)",
+          "size": "17",
+          "grams": 1.16,
+          "baseAmount": 25520,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т142101203",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "16",
+          "grams": 6.16,
+          "baseAmount": 123200,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "art": "Т14761Д356",
+      "brand": "Каратов",
+      "units": [
+        {
+          "store": "Ленинградская 33",
+          "size": "18,5",
+          "grams": 2.32,
+          "baseAmount": 46400,
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}

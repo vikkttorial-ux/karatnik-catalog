@@ -1,5 +1,5 @@
-import {selectionContains} from './selection-core.mjs?v=picks1124';
-import {matchesRetail} from './retail-core.mjs?v=campaign1130';
+import {selectionContains} from './selection-core.mjs?v=sale1127';
+import {matchesRetail} from './retail-core.mjs?v=selected1127';
 import {setKey} from './set-core.mjs?v=sets1120';
 // Чистые функции поиска и фильтров: используются страницей и проверками.
 export const FILTER_KEYS = ['selection','tip','size','char2','char3','thickness','lock','marka','proba','cvet','polnpust','kamni','stock','photo','inspired_by','pendant_kind','religion','motif','saint'];
@@ -29,16 +29,17 @@ export function prepareItems(items) {
     _codeNumbers:(item.codes||[]).map(codeNumber).filter(Boolean)
   }));
 }
-export function blankState() {return {q:'',rubMin:'',rubMax:'',client:'',set:'',model:'',picks:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
+export function blankState() {return {q:'',rubMin:'',rubMax:'',client:'',set:'',model:'',picks:'',discount:'',...Object.fromEntries(FILTER_KEYS.map(k=>[k,'']))};}
 export function parseState(search) {
   const params = new URLSearchParams(search), state=blankState();
-  for(const key of ['q','rubMin','rubMax','client','set','model','picks',...FILTER_KEYS]) state[key]=params.get(key) || '';
+  for(const key of ['q','rubMin','rubMax','client','set','model','picks','discount',...FILTER_KEYS]) state[key]=params.get(key) || '';
+  if(!['50','40','20'].includes(state.discount)) state.discount='';
   if(!supportsSize(state.tip)) state.size='';
   return state;
 }
 export function serializeState(state) {
   const params=new URLSearchParams();
-  for(const key of ['q','rubMin','rubMax','client','set','model','picks',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
+  for(const key of ['q','rubMin','rubMax','client','set','model','picks','discount',...FILTER_KEYS]) if(state[key] && (key!=='size'||supportsSize(state.tip))) params.set(key,state[key]);
   return params.toString();
 }
 export function valuesFor(item,key) {
@@ -127,5 +128,6 @@ export function formatUnitDetails(entry) {
     ...(typeof entry.cvet==='string'&&entry.cvet?{color:COLORS[entry.cvet]||entry.cvet}:{})
   };
 }
+
 
 

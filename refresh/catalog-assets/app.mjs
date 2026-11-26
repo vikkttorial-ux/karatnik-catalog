@@ -1,13 +1,13 @@
 import {restoreCatalogLocation,rememberCatalogReturn,editorUrl} from './navigation-context.mjs?v=nav1125';
 const returningCatalog=restoreCatalogLocation();
-import {createSelectionEditor} from './selection-ui.mjs?v=picks1124';
-import {decodeSelection,selectionContains} from './selection-core.mjs?v=picks1124';
+import {createSelectionEditor} from './selection-ui.mjs?v=sale1127';
+import {decodeSelection,selectionContains} from './selection-core.mjs?v=sale1127';
 import {validateSets,attachSets,relatedSets,setLink,setKey} from './set-core.mjs?v=sets1120';
-import {clientSelectionUrl} from './share-core.mjs?v=picks1124';
-import {retailOffer,discountedRubles,rubles,retailBanner,rubBound} from './retail-core.mjs?v=campaign1130';
+import {clientSelectionUrl} from './share-core.mjs?v=sale1127';
+import {retailOffer,discountedRubles,retailPercent,rubles,retailBanner,rubBound,retailDay} from './retail-core.mjs?v=selected1127';
 import {mountPhotoGallery} from './photo-gallery.mjs?v=detail1125';
 import {loadAttributeOverrides,applyAttributeOverrides,appendAttributeLink} from './attribute-client.mjs?v=nav1125';
-import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=picks1124';
+import {supportsSize,FILTER_KEYS,TYPE_ORDER,COLORS,EMPTY,prepareItems,blankState,parseState,serializeState,filterItems,facetCounts,valuesFor,sizeCompare,freshness,validPhotoPath,hasProductPhoto,codeNumber,validateData,formatUnitDetails} from './catalog-core.mjs?v=sale1127';
 
 import {SELECTIONS,showcase,promotionInfo,defaultPromotionOrder} from './promotion-core.mjs?v=stock1123';
 import {campaignDay,validateCampaign,withCampaign} from './campaign-core.mjs?v=1111-2026';
@@ -40,6 +40,7 @@ function el(tag,className,text) {const node=document.createElement(tag);if(class
 function button(className,text,handler) {const node=el('button',className,text);node.type='button';if(handler) node.addEventListener('click',handler);return node;}
 function positionWord(n) {const x=n%100,y=n%10;return x>=11&&x<=14?'позиций':y===1?'позиция':y>=2&&y<=4?'позиции':'позиций';}
 function filterLabel(key) {if(key==='char2'&&state.tip==='Серьги')return 'Вид серёг (характеристика 2)';return key==='thickness'&&state.tip==='Кольцо'?'Ширина шинки':labels[key];}
+function isSale50Day(now=new Date()) {const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now),day=Object.fromEntries(parts.filter(part=>part.type!=='literal').map(part=>[part.type,part.value]));const date=`${day.year}-${day.month}-${day.day}`;return date>='2026-11-27'&&date<='2026-11-29';}
 function labelFor(key,value) {
   if(key==='set')return 'Комплект '+value;
   if(key==='model')return 'Модель: '+value.split('|')[0];
@@ -62,6 +63,11 @@ function changeFilter(key,value) {
 }
 function resetAll() {
   clearTimeout(inputTimer);const picks=state.picks;state=blankState();state.picks=picks;state.client=clientView?'1':'';$('search').value='';updateUrl();render();
+}
+function shareUrlWithDiscount(url) {
+  const shared=new URL(url,location.href);
+  if(state.discount)shared.searchParams.set('discount',state.discount);
+  return shared.href;
 }
 function sortedDomain(key) {
   if(key==='selection')return [...(items.some(item=>item.campaign)?['11.11']:[]),...SELECTIONS];
@@ -118,6 +124,11 @@ function renderFilters(counts,host,mobile=false) {
 }
 function render() {
   $('retail-banner-title').textContent=retailBanner();
+  $('discount-filter').value=state.discount||'';
+  const sale50Available=isSale50Day()&&items.some(item=>retailOffer(item,{discount:'50'}).eligible>0);
+  $('sale50-picks').hidden=!sale50Available;
+  $('sale50-picks').setAttribute('aria-pressed',String(state.discount==='50'));
+  $('sale50-picks').classList.toggle('is-active',state.discount==='50');
   for(const key of ['rubMin','rubMax'])if(document.activeElement!==$(key))$(key).value=state[key]||'';
   $('rub-error').hidden=!(rubBound(state.rubMin)!==null&&rubBound(state.rubMax)!==null&&rubBound(state.rubMin)>rubBound(state.rubMax));
   const oldFocus=document.activeElement;
@@ -166,14 +177,14 @@ function render() {
   $('header-count').textContent=`${number.format(filtered.length)} ${positionWord(filtered.length)}`;
   $('results-announcement').textContent=`Найдено: ${number.format(filtered.length)} ${positionWord(filtered.length)}`;
   $('apply-filters').textContent=`Показать ${number.format(filtered.length)}`;
-  const selected=[...FILTER_KEYS,'rubMin','rubMax','set','model'].filter(key=>state[key]);
+  const selected=[...FILTER_KEYS,'rubMin','rubMax','set','model','discount'].filter(key=>state[key]);
   $('filter-count').hidden=selected.length===0;$('filter-count').textContent=selected.length;
   $('open-filters').setAttribute('aria-label',selected.length?`Фильтры, выбрано ${selected.length}`:'Фильтры');
   $('clear-search').hidden=!state.q;
   document.querySelectorAll('.reset-all').forEach(node=>node.disabled=!state.q&&!selected.length);
   const summary=document.createDocumentFragment();
-  for(const key of ['q','rubMin','rubMax','set','model',...FILTER_KEYS]) if(state[key]) {
-    const value=key==='q'?`Поиск: ${state.q}`:['char2','char3','thickness'].includes(key)?`${filterLabel(key)}: ${state[key]}`:labelFor(key,state[key]);
+  for(const key of ['q','rubMin','rubMax','set','model','discount',...FILTER_KEYS]) if(state[key]) {
+    const value=key==='q'?`Поиск: ${state.q}`:key==='discount'?`Скидка: −${state.discount}%`:['char2','char3','thickness'].includes(key)?`${filterLabel(key)}: ${state[key]}`:labelFor(key,state[key]);
     const chip=button('selection-pill','',()=>{state[key]='';if(key==='q')$('search').value='';if(key==='tip')state.size='';updateUrl();render();});
     chip.setAttribute('aria-label','Снять: '+value);chip.append(el('span','',value),el('span','','×'));summary.append(chip);
   }
@@ -237,10 +248,12 @@ function card(item) {
   else amount.append(el('strong','',item.units?'Цена от — уточняется':'Ещё не в наличии'));
   heading.append(amount);body.append(heading,tags);selectionEditor.appendButton(body,item);if(!clientView){appendPhotoUploadLink(body,item.art,item.marka);appendAttributeLink(body,item.art,item.marka);}
   const stickers=el('div','photo-stickers');
+  if(offer.discounts?.includes(50))stickers.append(el('span','photo-sticker sale50-sticker','−50%'));
   const titles={'Вернулись в наличие':'Снова в наличии','Пополнили размеры':'Поступили размеры','11.11':item.campaign?`11.11 · −${item.campaign.discount_percent}%`:'11.11'};
   const colors={'11.11':'campaign1111','Хит':'hit','Хит месяца':'hit','Новинка':'new','Новинка месяца':'new','Последнее поступление':'new','Вернулись в наличие':'returned','Пополнили размеры':'sizes','Скоро в продаже':'coming'};
   for(const label of item.promotions?.tags||[])stickers.append(el('span','photo-sticker '+(colors[label]||''),titles[label]||label));
   visual.append(stickers);
+  if(offer.discounts?.includes(50))body.append(el('p','campaign-detail','Избранные изделия −50% от полной ПРЦ · 27–29 ноября включительно. Скидки не суммируются. Точный процент указан у каждого изделия.'));
   if(item.campaign){const end=item.campaign.ends_on.split('-').reverse().join('.');body.append(el('p','campaign-detail',`Скидка от ПРЦ: ${item.campaign.discount_percent}%. По ${end} включительно. Обычные 20% не суммируются.`));}
   if(item.promotions?.expected_date)body.append(el('p','insertion','Ожидается: '+item.promotions.expected_date));
   else if(item.promotions?.tags.includes('Скоро в продаже'))body.append(el('p','insertion','Дата поступления уточняется'));
@@ -285,7 +298,7 @@ function card(item) {
         const display=entry.code?(codeNumber(entry.code)||entry.code):'Код неизвестен';
         const code=el('span','unit-code',display);code.title=entry.code||'Код неизвестен';
         const facts=formatUnitDetails(entry),values=el('span','unit-code-values');
-        const payable=discountedRubles(entry,item);if(payable!==null)values.append(el('span','unit-code-payable',rubles(payable)+' со скидкой'));
+        const payable=discountedRubles(entry,item);if(payable!==null)values.append(el('span','unit-code-payable',rubles(payable)+' · −'+retailPercent(item,new Date(),entry)+'%'));
         values.append(el('span','unit-code-grams',facts.grams),el('span','unit-code-prc',facts.prc),el('span','unit-code-size',facts.size));
         if(facts.color)values.append(el('span','unit-code-color',facts.color));
         row.append(code,values);list.append(row);
@@ -331,6 +344,8 @@ async function load() {
   } finally {loading=false;$('loading-panel').hidden=true;}
 }
 for(const key of ['rubMin','rubMax'])$(key).addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(()=>{state.rubMin=$('rubMin').value;state.rubMax=$('rubMax').value;updateUrl('replace');render();},250);});
+$('discount-filter').addEventListener('change',event=>{state.discount=event.target.value;updateUrl();render();});
+$('sale50-picks').addEventListener('click',()=>{state.discount=state.discount==='50'?'':'50';updateUrl();render();});
 for(const [id,key] of [['earring-kind-select','char2'],['earring-detail-select','char3'],['earring-lock-select','lock'],['ring-kind-select','char2'],['ring-style-select','char3'],['ring-width-select','thickness']]) $(id).addEventListener('change',event=>{state[key]=event.target.value;updateUrl();render();});
 $('weave-select').addEventListener('change',event=>{state.char2=event.target.value;updateUrl();render();});
 $('search').addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(()=>{state.q=$('search').value.trim();state.model='';state.set='';updateUrl('replace');render();},100);});
@@ -350,6 +365,7 @@ $('share-selection').addEventListener('click',async()=>{
  await sendClientUrl(clientSelectionUrl(state,location.href));
 });
 async function sendClientUrl(url){
+ url=shareUrlWithDiscount(url);
  let message='';
  if(navigator.share){try{await navigator.share({title:'Каратник — подборка украшений',text:'Подборка украшений по вашим пожеланиям',url});message='Подборка передана для отправки';}catch(error){if(error.name==='AbortError')return;}}
  if(!message){try{await navigator.clipboard.writeText(url);message='Ссылка для клиента скопирована — вставьте её в сообщение';}catch{$('share-url').value=url;$('share-dialog').showModal();$('share-url').select();return;}}
@@ -401,3 +417,8 @@ load();
 document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;let u;try{u=new URL(link.href,location.href);}catch{return;}if(u.origin==='https://karatnik-product-photos.workspace-903713.chatgpt.site'||u.pathname.endsWith('/smart-search.html')){clearTimeout(inputTimer);state.q=$('search').value.trim();updateUrl('replace');rememberCatalogReturn({shown,anchor:link.closest('.card')?.dataset.art||''});if(u.origin==='https://karatnik-product-photos.workspace-903713.chatgpt.site')link.href=editorUrl(u.href,location.href);}},true);
 const backbar=el('div','catalog-backbar'),back=button('','Назад',()=>{const open=document.querySelector('dialog[open]');if(open){open.close();return;}if(history.state?.catalogDepth>0){history.back();return;}if(location.search){resetAll();return;}window.scrollTo({top:0,behavior:'smooth'});});backbar.append(back,el('span','','Фильтры сохраняются при переходе в редактор'));$('results').prepend(backbar);
 
+
+
+function refreshRetailDay(){const day=retailDay();setTimeout(()=>{if(items.length)render();refreshRetailDay();},Math.max(250,Date.parse(day+'T21:00:00Z')-Date.now()+250));}
+refreshRetailDay();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&items.length)render();});
