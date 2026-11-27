@@ -8,16 +8,11 @@ export function validateSelectedSale(data){
  return data;
 }
 validateSelectedSale(SELECTED_SALE);
-const models=new Map(SELECTED_SALE.items.map(p=>[saleModelKey(p.art,p.brand),p.units]));
-const choices=new WeakMap();
+const models=new Set(SELECTED_SALE.items.map(p=>saleModelKey(p.art,p.brand)));
 const formatter=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'});
 export function selectedSaleActive(now=new Date()){const day=typeof now==='string'?now:formatter.format(now);return day>=SELECTED_SALE.starts_on&&day<=SELECTED_SALE.ends_on;}
-// Document assortment is store, size, weight, full retail amount and quantity.
-// Equivalent copies retain source order. Service IDs and their derivatives
-// are never part of the published offer configuration.
+// All sizes and copies of the listed article and brand participate on every store.
 export function isSelectedSaleUnit(item,entry,now=new Date()){
- if(!selectedSaleActive(now)||!entry)return false;
- let chosen=choices.get(item);if(!chosen){chosen=new WeakSet();const specs=models.get(saleModelKey(item.art??item.article,item.marka??item.brand))||[];for(const spec of specs){let remaining=spec.quantity;for(const candidate of item.stock_codes?.[spec.store]||[]){if(remaining&&String(candidate.size||'')===spec.size&&candidate.grams===spec.grams&&candidate.prc===spec.baseAmount){chosen.add(candidate);remaining--;}}}choices.set(item,chosen);}
- return chosen.has(entry);
+ return selectedSaleActive(now)&&!!entry&&models.has(saleModelKey(item.art??item.article,item.marka??item.brand))&&Object.values(item.stock_codes||{}).some(entries=>Array.isArray(entries)&&entries.includes(entry));
 }
 export const selectedSaleInfo=()=>({label:'−50%',name:'Избранные украшения −50%',starts_on:SELECTED_SALE.starts_on,ends_on:SELECTED_SALE.ends_on,percent:50});
